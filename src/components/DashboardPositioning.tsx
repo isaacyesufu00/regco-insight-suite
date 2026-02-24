@@ -19,7 +19,7 @@ const fadeUp = {
 };
 
 const DashboardPositioning = () => (
-  <section id="platform" className="py-20 md:py-28 hero-gradient">
+  <section id="platform" className="py-24 md:py-32 bg-muted/30">
     <div className="container mx-auto px-4 lg:px-8">
       <motion.div
         initial="hidden"
@@ -27,12 +27,12 @@ const DashboardPositioning = () => (
         viewport={{ once: true, margin: "-80px" }}
         variants={fadeUp}
         custom={0}
-        className="text-center max-w-2xl mx-auto mb-14"
+        className="text-center max-w-2xl mx-auto mb-16"
       >
-        <h2 className="text-3xl md:text-4xl font-bold font-display text-foreground">
-          Your Secure Compliance Command Center
+        <h2 className="text-3xl md:text-5xl font-extrabold font-display text-foreground leading-tight">
+          Your Secure Compliance<br />Command Center
         </h2>
-        <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
+        <p className="mt-5 text-muted-foreground text-lg leading-relaxed">
           RegCo provides a private, encrypted dashboard for every client. Manage filings, track obligations, collaborate with your team, and maintain a full audit trail — all in one place.
         </p>
       </motion.div>
@@ -46,9 +46,9 @@ const DashboardPositioning = () => (
             viewport={{ once: true, margin: "-40px" }}
             variants={fadeUp}
             custom={i + 1}
-            className="card-elevated rounded-xl p-6 border border-border/50"
+            className="bg-background rounded-2xl p-6 border border-border/40"
           >
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
               <f.icon className="w-5 h-5 text-primary" />
             </div>
             <h3 className="text-base font-semibold text-foreground mb-1">{f.title}</h3>
