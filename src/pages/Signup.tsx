@@ -4,84 +4,95 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [fullName, setFullName] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    const trimmedName = fullName.trim();
+    const trimmedCompany = companyName.trim();
+    const trimmedEmail = email.trim();
+
+    if (!trimmedName || !trimmedCompany || !trimmedEmail || !password || !confirmPassword) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
+    const { error: authError } = await supabase.auth.signUp({
+      email: trimmedEmail,
       password,
       options: {
-        data: { full_name: fullName },
+        data: { full_name: trimmedName, company_name: trimmedCompany },
         emailRedirectTo: window.location.origin,
       },
     });
     setLoading(false);
-    if (error) {
-      toast.error(error.message);
+
+    if (authError) {
+      setError("Something went wrong. Please try again.");
     } else {
-      toast.success("Account created! Check your email to confirm, then log in.");
-      navigate("/login");
+      navigate("/dashboard");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#eef2ff" }}>
+    <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: "#eef2ff" }}>
       <div className="w-full max-w-md rounded-2xl p-8 shadow-lg" style={{ background: "#ffffff" }}>
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold" style={{ color: "#1a1a2e" }}>
-            RegCo
-          </h1>
-          <p className="mt-2 text-sm" style={{ color: "#8a8a9a" }}>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style={{ color: "#3b6ef8" }}>
+              <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2"/>
+              <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <span className="text-2xl font-bold" style={{ color: "#1a1a2e" }}>RegCo</span>
+          </div>
+          <p className="text-sm" style={{ color: "#8a8a9a" }}>
             Create your compliance account
           </p>
         </div>
-        <form onSubmit={handleSignup} className="space-y-5">
+        <form onSubmit={handleSignup} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name" style={{ color: "#1a1a2e" }}>Full Name</Label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="John Doe"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              style={{ borderRadius: 12 }}
-            />
+            <Input id="name" placeholder="John Doe" value={fullName} onChange={(e) => setFullName(e.target.value)} required style={{ borderRadius: 12 }} maxLength={100} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="company" style={{ color: "#1a1a2e" }}>Company Name</Label>
+            <Input id="company" placeholder="Acme Bank Ltd" value={companyName} onChange={(e) => setCompanyName(e.target.value)} required style={{ borderRadius: 12 }} maxLength={100} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email" style={{ color: "#1a1a2e" }}>Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="you@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              style={{ borderRadius: 12 }}
-            />
+            <Input id="email" type="email" placeholder="you@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required style={{ borderRadius: 12 }} maxLength={255} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password" style={{ color: "#1a1a2e" }}>Password</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-              style={{ borderRadius: 12 }}
-            />
+            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} style={{ borderRadius: 12 }} />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirm" style={{ color: "#1a1a2e" }}>Confirm Password</Label>
+            <Input id="confirm" type="password" placeholder="••••••••" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required style={{ borderRadius: 12 }} />
+          </div>
+          {error && (
+            <p className="text-sm font-medium" style={{ color: "#ef4444" }}>{error}</p>
+          )}
           <Button
             type="submit"
             disabled={loading}
@@ -94,7 +105,7 @@ const Signup = () => {
         <p className="mt-6 text-center text-sm" style={{ color: "#8a8a9a" }}>
           Already have an account?{" "}
           <Link to="/login" className="font-semibold" style={{ color: "#3b6ef8" }}>
-            Sign in
+            Login
           </Link>
         </p>
       </div>

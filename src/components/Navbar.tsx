@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,7 +18,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl">
       <div className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
         {/* Logo */}
-        <a href="#" className="text-lg font-bold font-display text-foreground tracking-tight flex items-center gap-2">
+        <a href="/" className="text-lg font-bold font-display text-foreground tracking-tight flex items-center gap-2">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-primary">
             <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2"/>
             <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -41,11 +42,11 @@ const Navbar = () => {
 
         {/* Right actions */}
         <div className="hidden lg:flex items-center gap-3">
-          <a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Login
-          </a>
-          <Button size="sm" variant="outline" className="rounded-full px-5 border-foreground/20 text-foreground font-medium">
-            Sign up
+          </Link>
+          <Button asChild size="sm" variant="outline" className="rounded-full px-5 border-foreground/20 text-foreground font-medium">
+            <Link to="/signup">Sign up</Link>
           </Button>
         </div>
 
@@ -78,8 +79,12 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-3 border-t border-border/50">
-                <Button variant="ghost" size="sm">Login</Button>
-                <Button size="sm" variant="outline" className="rounded-full">Sign up</Button>
+                <Button asChild variant="ghost" size="sm">
+                  <Link to="/login" onClick={() => setMobileOpen(false)}>Login</Link>
+                </Button>
+                <Button asChild size="sm" variant="outline" className="rounded-full">
+                  <Link to="/signup" onClick={() => setMobileOpen(false)}>Sign up</Link>
+                </Button>
               </div>
             </div>
           </motion.div>

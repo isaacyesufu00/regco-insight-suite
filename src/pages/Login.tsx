@@ -4,21 +4,33 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: trimmedEmail,
+      password,
+    });
     setLoading(false);
-    if (error) {
-      toast.error(error.message);
+
+    if (authError) {
+      setError("Invalid email or password. Please try again.");
     } else {
       navigate("/dashboard");
     }
@@ -28,10 +40,14 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#eef2ff" }}>
       <div className="w-full max-w-md rounded-2xl p-8 shadow-lg" style={{ background: "#ffffff" }}>
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold" style={{ color: "#1a1a2e" }}>
-            RegCo
-          </h1>
-          <p className="mt-2 text-sm" style={{ color: "#8a8a9a" }}>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style={{ color: "#3b6ef8" }}>
+              <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2"/>
+              <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <span className="text-2xl font-bold" style={{ color: "#1a1a2e" }}>RegCo</span>
+          </div>
+          <p className="text-sm" style={{ color: "#8a8a9a" }}>
             Sign in to your compliance dashboard
           </p>
         </div>
@@ -45,7 +61,6 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="rounded-xl border-gray-200 focus:ring-2"
               style={{ borderRadius: 12 }}
             />
           </div>
@@ -58,17 +73,19 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="rounded-xl border-gray-200"
               style={{ borderRadius: 12 }}
             />
           </div>
+          {error && (
+            <p className="text-sm font-medium" style={{ color: "#ef4444" }}>{error}</p>
+          )}
           <Button
             type="submit"
             disabled={loading}
-            className="w-full text-white font-semibold rounded-xl h-11"
+            className="w-full text-white font-semibold h-11"
             style={{ background: "#3b6ef8", borderRadius: 12 }}
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Signing in..." : "Login"}
           </Button>
         </form>
         <p className="mt-6 text-center text-sm" style={{ color: "#8a8a9a" }}>
