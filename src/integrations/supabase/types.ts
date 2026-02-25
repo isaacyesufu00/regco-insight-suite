@@ -20,6 +20,7 @@ export type Database = {
           id: string
           score: number
           status_label: string
+          updated_at: string
           user_id: string
         }
         Insert: {
@@ -27,6 +28,7 @@ export type Database = {
           id?: string
           score?: number
           status_label?: string
+          updated_at?: string
           user_id: string
         }
         Update: {
@@ -34,7 +36,41 @@ export type Database = {
           id?: string
           score?: number
           status_label?: string
+          updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      demo_requests: {
+        Row: {
+          company_name: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          message: string | null
+          phone: string | null
+          report_type: string | null
+        }
+        Insert: {
+          company_name: string
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          report_type?: string | null
+        }
+        Update: {
+          company_name?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          report_type?: string | null
         }
         Relationships: []
       }
@@ -91,6 +127,7 @@ export type Database = {
           created_at: string
           id: string
           report_name: string
+          report_type: string | null
           status: string
           user_id: string
         }
@@ -98,6 +135,7 @@ export type Database = {
           created_at?: string
           id?: string
           report_name: string
+          report_type?: string | null
           status?: string
           user_id: string
         }
@@ -105,6 +143,7 @@ export type Database = {
           created_at?: string
           id?: string
           report_name?: string
+          report_type?: string | null
           status?: string
           user_id?: string
         }
@@ -115,6 +154,8 @@ export type Database = {
           created_at: string
           id: string
           on_time_rate: number
+          reports_filed: number
+          updated_at: string
           user_id: string
           violations: number
         }
@@ -122,6 +163,8 @@ export type Database = {
           created_at?: string
           id?: string
           on_time_rate?: number
+          reports_filed?: number
+          updated_at?: string
           user_id: string
           violations?: number
         }
@@ -129,6 +172,8 @@ export type Database = {
           created_at?: string
           id?: string
           on_time_rate?: number
+          reports_filed?: number
+          updated_at?: string
           user_id?: string
           violations?: number
         }

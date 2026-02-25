@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import DashboardMock from "./DashboardMock";
 
 const HeroSection = () => {
@@ -23,15 +24,16 @@ const HeroSection = () => {
             Save <strong className="text-foreground">10+ hours weekly</strong> on regulatory filings.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Button size="lg" className="rounded-full px-8 text-base font-semibold">
-              Sign up for free
+            <Button asChild size="lg" className="rounded-full px-8 text-base font-semibold">
+              <Link to="/login">Sign up for free</Link>
             </Button>
             <Button
+              asChild
               variant="outline"
               size="lg"
               className="rounded-full px-8 text-base font-semibold border-foreground/20"
             >
-              Book a demo
+              <Link to="/contact">Book a demo</Link>
             </Button>
           </div>
         </motion.div>
