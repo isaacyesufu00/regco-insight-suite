@@ -14,7 +14,126 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      compliance_scores: {
+        Row: {
+          created_at: string
+          id: string
+          score: number
+          status_label: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          score?: number
+          status_label?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          score?: number
+          status_label?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          company_name: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      report_statuses: {
+        Row: {
+          created_at: string
+          id: string
+          report_name: string
+          report_subtype: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          report_name: string
+          report_subtype: string
+          status: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          report_name?: string
+          report_subtype?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          id: string
+          report_name: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          report_name: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          report_name?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_stats: {
+        Row: {
+          created_at: string
+          id: string
+          on_time_rate: number
+          user_id: string
+          violations: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          on_time_rate?: number
+          user_id: string
+          violations?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          on_time_rate?: number
+          user_id?: string
+          violations?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
