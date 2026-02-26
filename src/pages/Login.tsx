@@ -30,7 +30,13 @@ const Login = () => {
     setLoading(false);
 
     if (authError) {
-      setError("Invalid email or password. Please try again.");
+      if (authError.message === "Email not confirmed") {
+        setError("Please check your email and confirm your account before logging in.");
+      } else if (authError.message === "Invalid login credentials") {
+        setError("Invalid email or password. Please try again.");
+      } else {
+        setError(authError.message);
+      }
     } else {
       navigate("/dashboard");
     }
