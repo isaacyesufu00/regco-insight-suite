@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { CheckCircle } from "lucide-react";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +39,7 @@ const Signup = () => {
     }
 
     setLoading(true);
-    const { error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
       email: trimmedEmail,
       password,
       options: {
@@ -48,11 +50,34 @@ const Signup = () => {
     setLoading(false);
 
     if (authError) {
-      setError("Something went wrong. Please try again.");
+      setError(authError.message);
+    } else if (data.user && !data.session) {
+      // Email confirmation is required
+      setError("");
+      setShowConfirmation(true);
     } else {
       navigate("/dashboard");
     }
   };
+
+  if (showConfirmation) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: "#eef2ff" }}>
+        <div className="w-full max-w-md rounded-2xl p-8 shadow-lg text-center" style={{ background: "#ffffff" }}>
+          <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: "#f0fdf4" }}>
+            <CheckCircle className="w-8 h-8" style={{ color: "#22c55e" }} />
+          </div>
+          <h2 className="text-xl font-bold mb-2" style={{ color: "#1a1a2e" }}>Check your email</h2>
+          <p className="text-sm mb-6" style={{ color: "#8a8a9a" }}>
+            We've sent a confirmation link to your email. Please click it to verify your account, then come back and log in.
+          </p>
+          <Button asChild variant="outline" className="rounded-full px-6">
+            <Link to="/login">Go to Login</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: "#eef2ff" }}>
