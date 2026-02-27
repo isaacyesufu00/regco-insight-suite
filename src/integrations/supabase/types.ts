@@ -76,22 +76,28 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_status: string
           company_name: string | null
           created_at: string
           full_name: string | null
           id: string
+          rc_number: string | null
         }
         Insert: {
+          account_status?: string
           company_name?: string | null
           created_at?: string
           full_name?: string | null
           id: string
+          rc_number?: string | null
         }
         Update: {
+          account_status?: string
           company_name?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
+          rc_number?: string | null
         }
         Relationships: []
       }
@@ -125,6 +131,7 @@ export type Database = {
       reports: {
         Row: {
           created_at: string
+          file_path: string | null
           id: string
           report_name: string
           report_type: string | null
@@ -133,6 +140,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          file_path?: string | null
           id?: string
           report_name: string
           report_type?: string | null
@@ -141,6 +149,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          file_path?: string | null
           id?: string
           report_name?: string
           report_type?: string | null
