@@ -1,1 +1,4 @@
 project_id = "pdplkprcomjslilznbsl"
+
+[functions.send-demo-notification]
+verify_jwt = false

@@ -48,21 +48,34 @@ const Contact = () => {
     }
 
     setLoading(true);
-    const { error: dbError } = await supabase.from("demo_requests").insert({
+
+    const payload = {
       full_name: trimmedName.slice(0, 100),
       company_name: trimmedCompany.slice(0, 100),
       email: trimmedEmail.slice(0, 255),
       phone: trimmedPhone.slice(0, 30) || null,
       report_type: reportType || null,
       message: trimmedMessage.slice(0, 2000) || null,
-    });
-    setLoading(false);
+    };
+
+    // Save to database
+    const { error: dbError } = await supabase.from("demo_requests").insert(payload);
 
     if (dbError) {
+      setLoading(false);
       setError("Something went wrong. Please try again.");
-    } else {
-      setSubmitted(true);
+      return;
     }
+
+    // Send email notification (fire and forget — don't block user on email failure)
+    try {
+      await supabase.functions.invoke("send-demo-notification", { body: payload });
+    } catch (emailErr) {
+      console.error("Email notification failed:", emailErr);
+    }
+
+    setLoading(false);
+    setSubmitted(true);
   };
 
   return (
