@@ -10,6 +10,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
+import DashboardHome from "./pages/DashboardHome";
+import NewReport from "./pages/NewReport";
+import DashboardSettings from "./pages/DashboardSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,7 +36,12 @@ const App = () => (
                   <Dashboard />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route index element={<DashboardHome />} />
+              <Route path="reports" element={<DashboardHome />} />
+              <Route path="new-report" element={<NewReport />} />
+              <Route path="settings" element={<DashboardSettings />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
