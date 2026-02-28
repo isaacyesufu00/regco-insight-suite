@@ -3,6 +3,7 @@ import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useSessionTimeout } from "@/hooks/useSessionTimeout";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { user } = useAuth();
   const [companyName, setCompanyName] = useState<string | null>(null);
+  useSessionTimeout();
 
   useEffect(() => {
     if (!user) return;

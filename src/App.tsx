@@ -12,7 +12,10 @@ import Contact from "./pages/Contact";
 import Dashboard from "./pages/Dashboard";
 import DashboardHome from "./pages/DashboardHome";
 import NewReport from "./pages/NewReport";
+import MyReports from "./pages/MyReports";
+import DataSources from "./pages/DataSources";
 import DashboardSettings from "./pages/DashboardSettings";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,10 +41,19 @@ const App = () => (
               }
             >
               <Route index element={<DashboardHome />} />
-              <Route path="reports" element={<DashboardHome />} />
+              <Route path="reports" element={<MyReports />} />
               <Route path="new-report" element={<NewReport />} />
+              <Route path="data-sources" element={<DataSources />} />
               <Route path="settings" element={<DashboardSettings />} />
             </Route>
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <Admin />
+                </ProtectedRoute>
+              }
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

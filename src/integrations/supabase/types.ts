@@ -41,6 +41,36 @@ export type Database = {
         }
         Relationships: []
       }
+      data_sources: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size?: number
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       demo_requests: {
         Row: {
           company_name: string
@@ -74,30 +104,108 @@ export type Database = {
         }
         Relationships: []
       }
+      institution_report_types: {
+        Row: {
+          created_at: string
+          id: string
+          report_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          report_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          report_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           account_status: string
+          cbn_license_category: string | null
           company_name: string | null
+          compliance_lead_name: string | null
           created_at: string
           full_name: string | null
           id: string
+          notification_email_report_ready: boolean
+          phone: string | null
           rc_number: string | null
         }
         Insert: {
           account_status?: string
+          cbn_license_category?: string | null
           company_name?: string | null
+          compliance_lead_name?: string | null
           created_at?: string
           full_name?: string | null
           id: string
+          notification_email_report_ready?: boolean
+          phone?: string | null
           rc_number?: string | null
         }
         Update: {
           account_status?: string
+          cbn_license_category?: string | null
           company_name?: string | null
+          compliance_lead_name?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
+          notification_email_report_ready?: boolean
+          phone?: string | null
           rc_number?: string | null
+        }
+        Relationships: []
+      }
+      report_requests: {
+        Row: {
+          created_at: string
+          data_source_id: string | null
+          form_data: Json
+          id: string
+          institution_name: string
+          rc_number: string | null
+          report_type: string
+          reporting_period_end: string
+          reporting_period_start: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_source_id?: string | null
+          form_data?: Json
+          id?: string
+          institution_name: string
+          rc_number?: string | null
+          report_type: string
+          reporting_period_end: string
+          reporting_period_start: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_source_id?: string | null
+          form_data?: Json
+          id?: string
+          institution_name?: string
+          rc_number?: string | null
+          report_type?: string
+          reporting_period_end?: string
+          reporting_period_start?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -131,29 +239,62 @@ export type Database = {
       reports: {
         Row: {
           created_at: string
+          docx_url: string | null
           file_path: string | null
           id: string
+          pdf_url: string | null
           report_name: string
           report_type: string | null
+          reporting_period_end: string | null
+          reporting_period_start: string | null
           status: string
           user_id: string
+          xlsx_url: string | null
         }
         Insert: {
           created_at?: string
+          docx_url?: string | null
           file_path?: string | null
           id?: string
+          pdf_url?: string | null
           report_name: string
           report_type?: string | null
+          reporting_period_end?: string | null
+          reporting_period_start?: string | null
           status?: string
           user_id: string
+          xlsx_url?: string | null
         }
         Update: {
           created_at?: string
+          docx_url?: string | null
           file_path?: string | null
           id?: string
+          pdf_url?: string | null
           report_name?: string
           report_type?: string | null
+          reporting_period_end?: string | null
+          reporting_period_start?: string | null
           status?: string
+          user_id?: string
+          xlsx_url?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
         Relationships: []
@@ -193,10 +334,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -323,6 +470,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
