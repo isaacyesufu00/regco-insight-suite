@@ -1,13 +1,20 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckCircle } from "lucide-react";
 
+const planLabels: Record<string, string> = {
+  starter: "Starter",
+  growth: "Growth",
+};
 const Signup = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const selectedPlan = searchParams.get("plan");
+  const planName = selectedPlan ? planLabels[selectedPlan] : null;
   const [fullName, setFullName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [email, setEmail] = useState("");
@@ -93,6 +100,11 @@ const Signup = () => {
           <p className="text-sm" style={{ color: "#8a8a9a" }}>
             Create your compliance account
           </p>
+          {planName && (
+            <div className="mt-3 inline-block rounded-full px-4 py-1.5 text-sm font-semibold" style={{ background: "#eef2ff", color: "#3b6ef8" }}>
+              You are signing up for the {planName} Plan
+            </div>
+          )}
         </div>
         <form onSubmit={handleSignup} className="space-y-4">
           <div className="space-y-2">
