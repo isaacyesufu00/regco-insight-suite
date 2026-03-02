@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import EnterpriseSalesModal from "@/components/EnterpriseSalesModal";
 
 const tiers = [
@@ -11,18 +10,18 @@ const tiers = [
     planKey: "starter",
     audience: "For small fintechs",
     features: ["Basic reporting tools", "Limited submissions", "Email support", "Standard dashboard"],
-    cta: "Get Started",
+    cta: "Contact Sales",
     highlight: false,
-    isEnterprise: false,
+    message: "I am interested in the Starter plan for small fintechs. Please contact me to discuss pricing.",
   },
   {
     name: "Growth",
     planKey: "growth",
     audience: "For scaling institutions",
     features: ["Advanced reporting", "Monitoring dashboard", "Priority support", "Multi-user access"],
-    cta: "Get Started",
+    cta: "Contact Sales",
     highlight: true,
-    isEnterprise: false,
+    message: "I am interested in the Growth plan for scaling institutions. Please contact me to discuss pricing.",
   },
   {
     name: "Enterprise",
@@ -31,7 +30,7 @@ const tiers = [
     features: ["Full compliance suite", "Dedicated compliance specialist", "Custom integrations", "SLA guarantee"],
     cta: "Contact Sales",
     highlight: false,
-    isEnterprise: true,
+    message: "I am interested in the Enterprise plan for large banks. Please contact me to discuss pricing.",
   },
 ];
 
@@ -43,12 +42,11 @@ const fadeUp = {
   }),
 };
 
-const ENTERPRISE_MESSAGE = "I am interested in the Enterprise plan for large banks. Please contact me to discuss pricing.";
 const CUSTOM_QUOTE_MESSAGE = "I would like to request a custom quote for RegCo. Please contact me to discuss my institution's specific needs.";
 
 const PricingSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalMessage, setModalMessage] = useState(ENTERPRISE_MESSAGE);
+  const [modalMessage, setModalMessage] = useState("");
 
   const openModal = (msg: string) => {
     setModalMessage(msg);
@@ -105,23 +103,13 @@ const PricingSection = () => {
                     </li>
                   ))}
                 </ul>
-                {tier.isEnterprise ? (
-                  <Button
-                    variant="outline"
-                    className="rounded-full w-full hover:scale-[1.02] transition-transform"
-                    onClick={() => openModal(ENTERPRISE_MESSAGE)}
-                  >
-                    {tier.cta}
-                  </Button>
-                ) : (
-                  <Button
-                    asChild
-                    variant={tier.highlight ? "default" : "outline"}
-                    className="rounded-full w-full hover:scale-[1.02] transition-transform"
-                  >
-                    <Link to={`/signup?plan=${tier.planKey}`}>{tier.cta}</Link>
-                  </Button>
-                )}
+                <Button
+                  variant={tier.highlight ? "default" : "outline"}
+                  className="rounded-full w-full hover:scale-[1.02] transition-transform"
+                  onClick={() => openModal(tier.message)}
+                >
+                  {tier.cta}
+                </Button>
               </motion.div>
             ))}
           </div>
