@@ -12,10 +12,10 @@ const useCasesDropdown = [
 ];
 
 const featuresDropdown = [
-  { label: "Report Generation", href: "/#platform" },
-  { label: "Transcription", href: "/#transcription" },
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Data Sources", href: "/#data-sources" },
+  { label: "Report Generation", href: "/features/report-generation" },
+  { label: "Transcription", href: "/features/transcription" },
+  { label: "Dashboard", href: "/features/dashboard" },
+  { label: "Data Sources", href: "/features/data-sources" },
 ];
 
 const Navbar = () => {

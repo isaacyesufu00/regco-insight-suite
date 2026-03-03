@@ -19,6 +19,14 @@ import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import Security from "./pages/Security";
+import UseCaseMFB from "./pages/UseCaseMFB";
+import UseCaseCommercial from "./pages/UseCaseCommercial";
+import UseCaseFinance from "./pages/UseCaseFinance";
+import UseCaseCompliance from "./pages/UseCaseCompliance";
+import FeatureReportGeneration from "./pages/FeatureReportGeneration";
+import FeatureTranscription from "./pages/FeatureTranscription";
+import FeatureDashboard from "./pages/FeatureDashboard";
+import FeatureDataSources from "./pages/FeatureDataSources";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +44,14 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/security" element={<Security />} />
+            <Route path="/use-cases/mfb" element={<UseCaseMFB />} />
+            <Route path="/use-cases/commercial" element={<UseCaseCommercial />} />
+            <Route path="/use-cases/finance" element={<UseCaseFinance />} />
+            <Route path="/use-cases/compliance" element={<UseCaseCompliance />} />
+            <Route path="/features/report-generation" element={<FeatureReportGeneration />} />
+            <Route path="/features/transcription" element={<FeatureTranscription />} />
+            <Route path="/features/dashboard" element={<FeatureDashboard />} />
+            <Route path="/features/data-sources" element={<FeatureDataSources />} />
             <Route
               path="/dashboard"
               element={
