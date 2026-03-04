@@ -2,3 +2,6 @@ project_id = "pdplkprcomjslilznbsl"
 
 [functions.send-demo-notification]
 verify_jwt = false
+
+[functions.onboard-client]
+verify_jwt = false

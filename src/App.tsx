@@ -15,7 +15,11 @@ import NewReport from "./pages/NewReport";
 import MyReports from "./pages/MyReports";
 import DataSources from "./pages/DataSources";
 import DashboardSettings from "./pages/DashboardSettings";
-import Admin from "./pages/Admin";
+import AdminLayout from "./pages/AdminLayout";
+import AdminClients from "./pages/AdminClients";
+import AdminClientDetail from "./pages/AdminClientDetail";
+import AdminOnboard from "./pages/AdminOnboard";
+import AdminDemos from "./pages/AdminDemos";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import Security from "./pages/Security";
@@ -72,10 +76,16 @@ const App = () => (
               path="/admin"
               element={
                 <ProtectedRoute>
-                  <Admin />
+                  <AdminLayout />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route index element={<AdminClients />} />
+              <Route path="clients" element={<AdminClients />} />
+              <Route path="clients/:id" element={<AdminClientDetail />} />
+              <Route path="onboard" element={<AdminOnboard />} />
+              <Route path="demos" element={<AdminDemos />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
