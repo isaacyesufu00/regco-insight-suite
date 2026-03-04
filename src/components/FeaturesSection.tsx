@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Upload, Building2, Calendar, FileText, Heart, AlertTriangle, Clock, BarChart3 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -59,9 +60,9 @@ const FeaturesSection = () => {
               </div>
             </div>
             <div className="px-7 pb-7 md:px-9 md:pb-9">
-              <a href="#" className="inline-flex items-center gap-1 text-sm font-semibold text-foreground hover:text-primary transition-colors">
+              <Link to="/features/report-generation" className="inline-flex items-center gap-1 text-sm font-semibold text-foreground hover:text-primary transition-colors">
                 About Reports <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
           </motion.div>
 
@@ -98,9 +99,9 @@ const FeaturesSection = () => {
               </div>
             </div>
             <div className="px-7 pb-7 md:px-9 md:pb-9">
-              <a href="#" className="inline-flex items-center gap-1 text-sm font-semibold text-foreground hover:text-primary transition-colors">
+              <Link to="/features/monitoring" className="inline-flex items-center gap-1 text-sm font-semibold text-foreground hover:text-primary transition-colors">
                 About Monitoring <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>

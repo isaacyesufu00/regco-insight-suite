@@ -27,6 +27,7 @@ import FeatureReportGeneration from "./pages/FeatureReportGeneration";
 import FeatureTranscription from "./pages/FeatureTranscription";
 import FeatureDashboard from "./pages/FeatureDashboard";
 import FeatureDataSources from "./pages/FeatureDataSources";
+import FeatureMonitoring from "./pages/FeatureMonitoring";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/features/transcription" element={<FeatureTranscription />} />
             <Route path="/features/dashboard" element={<FeatureDashboard />} />
             <Route path="/features/data-sources" element={<FeatureDataSources />} />
+            <Route path="/features/monitoring" element={<FeatureMonitoring />} />
             <Route
               path="/dashboard"
               element={
