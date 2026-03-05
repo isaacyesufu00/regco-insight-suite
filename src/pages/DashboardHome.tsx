@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import { ComplianceGauge } from "@/components/ComplianceGauge";
 
 interface Profile {
   full_name: string | null;
@@ -151,6 +152,9 @@ const DashboardHome = () => {
           </Card>
         ))}
       </div>
+
+      {/* Compliance Score Gauge */}
+      <ComplianceGauge />
 
       {/* Recent Reports */}
       <Card>

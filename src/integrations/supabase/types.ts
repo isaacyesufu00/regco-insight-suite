@@ -16,25 +16,31 @@ export type Database = {
     Tables: {
       compliance_scores: {
         Row: {
+          calculated_at: string | null
           created_at: string
           id: string
           score: number
+          score_breakdown: Json | null
           status_label: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          calculated_at?: string | null
           created_at?: string
           id?: string
           score?: number
+          score_breakdown?: Json | null
           status_label?: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          calculated_at?: string | null
           created_at?: string
           id?: string
           score?: number
+          score_breakdown?: Json | null
           status_label?: string
           updated_at?: string
           user_id?: string
@@ -101,6 +107,33 @@ export type Database = {
           message?: string | null
           phone?: string | null
           report_type?: string | null
+        }
+        Relationships: []
+      }
+      email_reminders: {
+        Row: {
+          id: string
+          reminder_type: string
+          report_type: string
+          reporting_period: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          reminder_type: string
+          report_type: string
+          reporting_period: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          reminder_type?: string
+          report_type?: string
+          reporting_period?: string
+          sent_at?: string
+          user_id?: string
         }
         Relationships: []
       }

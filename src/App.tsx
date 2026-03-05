@@ -15,6 +15,7 @@ import NewReport from "./pages/NewReport";
 import MyReports from "./pages/MyReports";
 import DataSources from "./pages/DataSources";
 import DashboardSettings from "./pages/DashboardSettings";
+import ComplianceCalendar from "./pages/ComplianceCalendar";
 import AdminLayout from "./pages/AdminLayout";
 import AdminClients from "./pages/AdminClients";
 import AdminClientDetail from "./pages/AdminClientDetail";
@@ -70,6 +71,7 @@ const App = () => (
               <Route path="reports" element={<MyReports />} />
               <Route path="new-report" element={<NewReport />} />
               <Route path="data-sources" element={<DataSources />} />
+              <Route path="calendar" element={<ComplianceCalendar />} />
               <Route path="settings" element={<DashboardSettings />} />
             </Route>
             <Route

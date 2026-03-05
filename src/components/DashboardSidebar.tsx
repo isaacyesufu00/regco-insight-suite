@@ -1,4 +1,4 @@
-import { Home, FileText, FilePlus, Settings, LogOut, Building2, Database } from "lucide-react";
+import { Home, FileText, FilePlus, Settings, LogOut, Building2, Database, CalendarDays } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +20,7 @@ const navItems = [
   { title: "My Reports", url: "/dashboard/reports", icon: FileText },
   { title: "Create New Report", url: "/dashboard/new-report", icon: FilePlus },
   { title: "Data Sources", url: "/dashboard/data-sources", icon: Database },
+  { title: "Calendar", url: "/dashboard/calendar", icon: CalendarDays },
   { title: "Settings", url: "/dashboard/settings", icon: Settings },
 ];
 
