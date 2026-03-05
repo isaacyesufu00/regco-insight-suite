@@ -33,6 +33,7 @@ import FeatureTranscription from "./pages/FeatureTranscription";
 import FeatureDashboard from "./pages/FeatureDashboard";
 import FeatureDataSources from "./pages/FeatureDataSources";
 import FeatureMonitoring from "./pages/FeatureMonitoring";
+import SupportTickets from "./pages/SupportTickets";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ const App = () => (
               <Route path="data-sources" element={<DataSources />} />
               <Route path="calendar" element={<ComplianceCalendar />} />
               <Route path="settings" element={<DashboardSettings />} />
+              <Route path="support" element={<SupportTickets />} />
             </Route>
             <Route
               path="/admin"

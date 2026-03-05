@@ -1,4 +1,4 @@
-import { Home, FileText, FilePlus, Settings, LogOut, Building2, Database, CalendarDays } from "lucide-react";
+import { Home, FileText, FilePlus, Settings, LogOut, Building2, Database, CalendarDays, LifeBuoy } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,7 @@ const navItems = [
   { title: "Data Sources", url: "/dashboard/data-sources", icon: Database },
   { title: "Calendar", url: "/dashboard/calendar", icon: CalendarDays },
   { title: "Settings", url: "/dashboard/settings", icon: Settings },
+  { title: "Support", url: "/dashboard/support", icon: LifeBuoy },
 ];
 
 interface DashboardSidebarProps {
