@@ -34,9 +34,7 @@ const AdminLayout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
           <BackButton to="/dashboard" />
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <Building2 className="w-4 h-4 text-primary-foreground" />
-            </div>
+            <img src="/assets/RegCo_Logo.png" alt="RegCo Logo" className="h-8 w-auto" />
             <h1 className="text-xl font-bold text-foreground">Admin Panel</h1>
           </div>
           <nav className="ml-8 flex gap-1">

@@ -18,7 +18,7 @@ const Footer = () => (
     <div className="container mx-auto px-4 lg:px-8">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
         <div className="col-span-2 md:col-span-1">
-          <span className="text-lg font-bold font-display text-foreground">RegCo</span>
+          <img src="/assets/RegCo_Logo.png" alt="RegCo Logo" className="h-8 w-auto" />
           <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-xs">
             AI-powered regulatory reporting and compliance infrastructure for financial institutions.
           </p>
