@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import regcoLogo from "@/assets/RegCo_Logo.png";
 
 const useCasesDropdown = [
   { label: "MFBs & Community Banks", href: "/use-cases/mfb" },
@@ -59,7 +58,11 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
         {/* Logo */}
         <Link to="/" className="text-lg font-bold font-display text-foreground tracking-tight flex items-center gap-2">
-          <img src={regcoLogo} alt="RegCo" className="h-6 w-auto" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-primary">
+            <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2"/>
+            <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+          RegCo
         </Link>
 
         {/* Center nav links */}
