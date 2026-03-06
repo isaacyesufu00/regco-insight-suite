@@ -57,8 +57,12 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl">
       <div className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
         {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <img src="/assets/RegCo_Logo.png" alt="RegCo Logo" className="h-8 w-auto" />
+        <Link to="/" className="text-lg font-bold font-display text-foreground tracking-tight flex items-center gap-2">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-primary">
+            <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2"/>
+            <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+          RegCo
         </Link>
 
         {/* Center nav links */}

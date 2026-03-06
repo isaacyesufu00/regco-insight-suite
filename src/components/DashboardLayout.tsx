@@ -34,8 +34,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex-1 flex flex-col min-w-0">
           <header className="h-14 flex items-center border-b border-border px-4 bg-card">
             <SidebarTrigger className="mr-4" />
-            <img src="/assets/RegCo_Logo.png" alt="RegCo Logo" className="h-6 w-auto mr-2" />
-            <span className="text-sm font-semibold text-foreground">Dashboard</span>
+            <span className="text-sm font-semibold text-foreground">RegCo Dashboard</span>
           </header>
           <main className="flex-1 p-6 overflow-auto">
             {children}
