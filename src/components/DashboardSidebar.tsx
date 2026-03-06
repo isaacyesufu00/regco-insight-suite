@@ -1,4 +1,5 @@
 import { Home, FileText, FilePlus, Settings, LogOut, Building2, Database, CalendarDays, LifeBuoy } from "lucide-react";
+import regcoLogo from "@/assets/RegCo_Logo.png";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -46,9 +47,7 @@ export function DashboardSidebar({ companyName }: DashboardSidebarProps) {
         {/* Brand */}
         <div className="p-4 border-b border-sidebar-border">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-4 h-4 text-primary-foreground" />
-            </div>
+            <img src={regcoLogo} alt="RegCo" className="h-8 w-auto flex-shrink-0" />
             {!collapsed && (
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-sidebar-foreground truncate">
