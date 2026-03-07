@@ -95,10 +95,11 @@ const Login = () => {
           </Button>
         </form>
         <p className="mt-6 text-center text-sm" style={{ color: "#8a8a9a" }}>
-          Don't have an account?{" "}
-          <Link to="/signup" className="font-semibold" style={{ color: "#3b6ef8" }}>
-            Sign up
-          </Link>
+          Access is by invitation only.{" "}
+          <Link to="/contact" className="font-semibold" style={{ color: "#3b6ef8" }}>
+            Book a demo
+          </Link>{" "}
+          to get started.
         </p>
       </div>
     </div>

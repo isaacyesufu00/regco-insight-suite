@@ -7,15 +7,13 @@ import EnterpriseSalesModal from "@/components/EnterpriseSalesModal";
 interface PageCTAProps {
   headline: string;
   primaryLabel?: string;
-  primaryAction?: "signup" | "contact";
   showDemo?: boolean;
   contactMessage?: string;
 }
 
 const PageCTA = ({
   headline,
-  primaryLabel = "Get Started Free",
-  primaryAction = "signup",
+  primaryLabel = "Book a Demo",
   showDemo = true,
   contactMessage = "I would like to learn more about RegCo. Please contact me to discuss my institution's needs.",
 }: PageCTAProps) => {
@@ -36,19 +34,9 @@ const PageCTA = ({
               {headline}
             </h2>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              {primaryAction === "signup" ? (
-                <Button asChild size="lg" className="rounded-full px-8 text-base font-semibold hover:scale-[1.02] transition-transform">
-                  <Link to="/signup">{primaryLabel}</Link>
-                </Button>
-              ) : (
-                <Button
-                  size="lg"
-                  className="rounded-full px-8 text-base font-semibold hover:scale-[1.02] transition-transform"
-                  onClick={() => setModalOpen(true)}
-                >
-                  {primaryLabel}
-                </Button>
-              )}
+              <Button asChild size="lg" className="rounded-full px-8 text-base font-semibold hover:scale-[1.02] transition-transform">
+                <Link to="/contact">{primaryLabel}</Link>
+              </Button>
               {showDemo && (
                 <Button
                   asChild
@@ -56,7 +44,7 @@ const PageCTA = ({
                   size="lg"
                   className="rounded-full px-8 text-base font-semibold border-foreground/20 hover:scale-[1.02] transition-transform"
                 >
-                  <Link to="/contact">Book a Demo</Link>
+                  <Link to="/login">Login</Link>
                 </Button>
               )}
             </div>
