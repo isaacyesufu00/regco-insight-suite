@@ -161,7 +161,7 @@ const Navbar = () => {
             Login
           </Link>
           <Button asChild size="sm" variant="outline" className="rounded-full px-5 border-foreground/20 text-foreground font-medium hover:scale-[1.02] transition-transform">
-            <Link to="/signup">Sign up</Link>
+            <Link to="/contact">Book a Demo</Link>
           </Button>
         </div>
 
@@ -232,7 +232,7 @@ const Navbar = () => {
                   <Link to="/login" onClick={() => setMobileOpen(false)}>Login</Link>
                 </Button>
                 <Button asChild size="sm" variant="outline" className="rounded-full">
-                  <Link to="/signup" onClick={() => setMobileOpen(false)}>Sign up</Link>
+                  <Link to="/contact" onClick={() => setMobileOpen(false)}>Book a Demo</Link>
                 </Button>
               </div>
             </div>
