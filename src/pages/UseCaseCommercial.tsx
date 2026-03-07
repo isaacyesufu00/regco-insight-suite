@@ -133,7 +133,6 @@ const UseCaseCommercial = () => (
     <PageCTA
       headline="Speak to our enterprise team."
       primaryLabel="Contact Sales"
-      primaryAction="contact"
       showDemo={false}
       contactMessage="I am interested in RegCo for our commercial bank. Please contact me to discuss enterprise pricing."
     />
