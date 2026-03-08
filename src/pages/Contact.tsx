@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import RegCoLogo from "@/assets/RegCo_Logo.png";
 
 const reportOptions = [
   "CBN Returns",

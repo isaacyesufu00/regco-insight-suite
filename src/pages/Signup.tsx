@@ -12,6 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import RegCoLogo from "@/assets/RegCo_Logo.png";
 
 type PasswordStrength = "weak" | "fair" | "strong";
 
