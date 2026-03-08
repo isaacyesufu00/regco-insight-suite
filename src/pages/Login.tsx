@@ -163,8 +163,8 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#eef2ff" }}>
       <div className="w-full max-w-md rounded-2xl p-8 shadow-lg" style={{ background: "#ffffff" }}>
         <div className="text-center mb-8">
-          <Link to="/" className="flex items-center justify-center mb-2">
-            <img src={RegCoLogo} alt="RegCo" style={{ width: 120, height: 34, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
+          <Link to="/" className="flex items-center justify-center mb-2 flex-shrink-0">
+            <img src={RegCoLogo} alt="RegCo" style={{ width: 160, height: 40, minWidth: 160, minHeight: 40, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
           </Link>
           <p className="text-sm" style={{ color: "#8a8a9a" }}>
             Sign in to your compliance dashboard

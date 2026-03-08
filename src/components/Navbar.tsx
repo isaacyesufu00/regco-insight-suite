@@ -58,8 +58,8 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl">
       <div className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2">
-          <img src={RegCoLogo} alt="RegCo" style={{ width: 100, height: 28, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
+        <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+          <img src={RegCoLogo} alt="RegCo" style={{ width: 160, height: 40, minWidth: 160, minHeight: 40, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
         </Link>
 
         {/* Center nav links */}
