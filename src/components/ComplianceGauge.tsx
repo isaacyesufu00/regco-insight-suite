@@ -26,7 +26,7 @@ export function ComplianceGauge() {
       // Trigger score recalculation
       try {
         await supabase.functions.invoke("calculate-compliance-score", {
-          body: {},
+          body: { user_id: user.id },
         });
       } catch { /* ignore */ }
 

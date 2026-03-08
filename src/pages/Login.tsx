@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import RegCoLogo from "@/assets/RegCo_Logo.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,89 +12,87 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [attemptCount, setAttemptCount] = useState(0);
-  const [secondsLeft, setSecondsLeft] = useState(0);
+  const [lockedUntil, setLockedUntil] = useState<Date | null>(null);
+  const [countdown, setCountdown] = useState("");
 
-  const isLocked = secondsLeft > 0;
+  const isLocked = lockedUntil && lockedUntil > new Date();
 
   // Countdown timer
   useEffect(() => {
-    if (secondsLeft <= 0) return;
-    const interval = setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 1) {
-          // Lock expired — re-check via edge function
-          const trimmed = email.trim().toLowerCase();
-          if (trimmed) {
-            supabase.functions
-              .invoke("check-login-lockout", { body: { email: trimmed } })
-              .then(({ data }) => {
-                if (data && !data.is_locked) {
-                  setAttemptCount(0);
-                }
-              });
-          }
-          return 0;
+    if (!lockedUntil) return;
+    const tick = () => {
+      const diff = lockedUntil.getTime() - Date.now();
+      if (diff <= 0) {
+        setLockedUntil(null);
+        setAttemptCount(0);
+        setCountdown("");
+        // Reset in DB
+        if (email.trim()) {
+          supabase
+            .from("login_attempts")
+            .update({ attempt_count: 0, locked_until: null })
+            .eq("email", email.trim().toLowerCase())
+            .then();
         }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [secondsLeft, email]);
-
-  const formatCountdown = (secs: number) => {
-    const m = Math.floor(secs / 60);
-    const s = secs % 60;
-    return `${m}:${s.toString().padStart(2, "0")}`;
-  };
-
-  const checkLockStatus = useCallback(async (emailAddr: string): Promise<boolean> => {
-    try {
-      const { data } = await supabase.functions.invoke("check-login-lockout", {
-        body: { email: emailAddr },
-      });
-      if (data) {
-        setAttemptCount(data.attempt_count ?? 0);
-        if (data.is_locked && data.seconds_remaining > 0) {
-          setSecondsLeft(data.seconds_remaining);
-          return true;
-        }
+        return;
       }
-    } catch {
-      // If check fails, allow login attempt
+      const mins = Math.floor(diff / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+      setCountdown(`${mins}:${secs.toString().padStart(2, "0")}`);
+    };
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [lockedUntil, email]);
+
+  const checkLockStatus = useCallback(async (emailAddr: string) => {
+    const { data } = await supabase
+      .from("login_attempts")
+      .select("attempt_count, locked_until")
+      .eq("email", emailAddr)
+      .maybeSingle();
+    if (data) {
+      setAttemptCount(data.attempt_count ?? 0);
+      if (data.locked_until && new Date(data.locked_until) > new Date()) {
+        setLockedUntil(new Date(data.locked_until));
+        return true;
+      }
     }
     return false;
   }, []);
 
   const recordFailedAttempt = async (emailAddr: string) => {
-    try {
-      const { data } = await supabase.functions.invoke("record-login-attempt", {
-        body: { email: emailAddr },
-      });
-      if (data) {
-        setAttemptCount(data.attempt_count ?? 0);
-        if (data.is_locked && data.seconds_remaining > 0) {
-          setSecondsLeft(data.seconds_remaining);
-        }
-      }
-    } catch {
-      // Silent fail — don't block login UX
+    const { data: existing } = await supabase
+      .from("login_attempts")
+      .select("id, attempt_count")
+      .eq("email", emailAddr)
+      .maybeSingle();
+
+    const newCount = (existing?.attempt_count ?? 0) + 1;
+    const lockTime = newCount >= 5 ? new Date(Date.now() + 15 * 60 * 1000).toISOString() : null;
+
+    if (existing) {
+      await supabase
+        .from("login_attempts")
+        .update({ attempt_count: newCount, locked_until: lockTime, last_attempt_at: new Date().toISOString() })
+        .eq("id", existing.id);
+    } else {
+      await supabase
+        .from("login_attempts")
+        .insert({ email: emailAddr, attempt_count: newCount, locked_until: lockTime, last_attempt_at: new Date().toISOString() });
     }
+
+    setAttemptCount(newCount);
+    if (lockTime) setLockedUntil(new Date(lockTime));
   };
 
-  const resetAttempts = async () => {
-    try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData?.session?.access_token;
-      if (token) {
-        await supabase.functions.invoke("reset-login-attempts", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      }
-    } catch {
-      // Silent fail
-    }
+  const resetAttempts = async (emailAddr: string) => {
+    await supabase
+      .from("login_attempts")
+      .update({ attempt_count: 0, locked_until: null })
+      .eq("email", emailAddr);
     setAttemptCount(0);
-    setSecondsLeft(0);
+    setLockedUntil(null);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -129,7 +126,7 @@ const Login = () => {
         setError(authError.message);
       }
     } else {
-      await resetAttempts();
+      await resetAttempts(trimmedEmail);
       navigate("/dashboard");
     }
   };
@@ -149,7 +146,7 @@ const Login = () => {
             Your account has been temporarily locked for security reasons. Please try again in 15 minutes or click Forgot Password to reset your credentials.
           </p>
           <div className="text-3xl font-mono font-bold mb-6" style={{ color: "#ef4444" }}>
-            {formatCountdown(secondsLeft)}
+            {countdown}
           </div>
           <Button asChild variant="outline" className="rounded-full px-6">
             <Link to="/contact">Forgot Password</Link>
@@ -163,8 +160,12 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: "#eef2ff" }}>
       <div className="w-full max-w-md rounded-2xl p-8 shadow-lg" style={{ background: "#ffffff" }}>
         <div className="text-center mb-8">
-          <Link to="/" className="flex items-center justify-center mb-2 flex-shrink-0">
-            <img src={RegCoLogo} alt="RegCo" style={{ width: 160, height: 40, minWidth: 160, minHeight: 40, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
+          <Link to="/" className="flex items-center justify-center gap-2 mb-2">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style={{ color: "#3b6ef8" }}>
+              <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2"/>
+              <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <span className="text-2xl font-bold" style={{ color: "#1a1a2e" }}>RegCo</span>
           </Link>
           <p className="text-sm" style={{ color: "#8a8a9a" }}>
             Sign in to your compliance dashboard

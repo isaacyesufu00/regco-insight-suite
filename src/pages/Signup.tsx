@@ -12,9 +12,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import RegCoLogo from "@/assets/RegCo_Logo.png";
 
-type PasswordStrength = "weak" | "fair" | "strong" | "compromised";
+type PasswordStrength = "weak" | "fair" | "strong";
 
 function getPasswordStrength(password: string): PasswordStrength {
   if (password.length < 8) return "weak";
@@ -30,7 +29,6 @@ const strengthConfig: Record<PasswordStrength, { label: string; value: number; c
   weak: { label: "Weak", value: 33, color: "#ef4444" },
   fair: { label: "Fair", value: 66, color: "#f59e0b" },
   strong: { label: "Strong", value: 100, color: "#22c55e" },
-  compromised: { label: "Compromised — this password is not safe to use", value: 100, color: "#7f1d1d" },
 };
 
 const planLabels: Record<string, string> = {
@@ -51,12 +49,10 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [isCompromised, setIsCompromised] = useState(false);
 
-  const baseStrength = useMemo(() => getPasswordStrength(password), [password]);
-  const strength = isCompromised ? "compromised" : baseStrength;
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
   const config = strengthConfig[strength];
-  const isWeak = baseStrength === "weak";
+  const isWeak = strength === "weak";
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,12 +87,7 @@ const Signup = () => {
     setLoading(false);
 
     if (authError) {
-      if (authError.message?.toLowerCase().includes("leaked") || authError.message?.toLowerCase().includes("pwned") || authError.message?.toLowerCase().includes("breach")) {
-        setIsCompromised(true);
-        setError("This password has appeared in a known data breach and cannot be used. Please choose a different password to keep your account secure.");
-      } else {
-        setError(authError.message);
-      }
+      setError(authError.message);
     } else if (data.user && !data.session) {
       setError("");
       setShowConfirmation(true);
@@ -139,8 +130,12 @@ const Signup = () => {
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: "#eef2ff" }}>
       <div className="w-full max-w-md rounded-2xl p-8 shadow-lg" style={{ background: "#ffffff" }}>
         <div className="text-center mb-8">
-          <Link to="/" className="flex items-center justify-center mb-2 flex-shrink-0">
-            <img src={RegCoLogo} alt="RegCo" style={{ width: 160, height: 40, minWidth: 160, minHeight: 40, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
+          <Link to="/" className="flex items-center justify-center gap-2 mb-2">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style={{ color: "#3b6ef8" }}>
+              <rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" strokeWidth="2"/>
+              <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <span className="text-2xl font-bold" style={{ color: "#1a1a2e" }}>RegCo</span>
           </Link>
           <p className="text-sm" style={{ color: "#8a8a9a" }}>
             Create your compliance account
@@ -166,8 +161,7 @@ const Signup = () => {
           </div>
           <div className="space-y-2">
             <Label htmlFor="password" style={{ color: "#1a1a2e" }}>Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => { setPassword(e.target.value); setIsCompromised(false); }} required minLength={8} style={{ borderRadius: 12 }} />
-            <p className="text-xs" style={{ color: "#8a8a9a" }}>Use a unique password you have not used on any other website.</p>
+            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} style={{ borderRadius: 12 }} />
             {password.length > 0 && (
               <div className="flex items-center gap-3 mt-1.5">
                 <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#e5e7eb" }}>
