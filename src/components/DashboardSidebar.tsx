@@ -47,9 +47,7 @@ export function DashboardSidebar({ companyName }: DashboardSidebarProps) {
         {/* Brand */}
         <div className="p-4 border-b border-sidebar-border">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-              <Building2 className="w-4 h-4 text-primary-foreground" />
-            </div>
+            <img src={RegCoLogo} alt="RegCo" style={{ width: 32, height: 32, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
             {!collapsed && (
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-sidebar-foreground truncate">
