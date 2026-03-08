@@ -1,9 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+type PasswordStrength = "weak" | "fair" | "strong";
+
+function getPasswordStrength(password: string): PasswordStrength {
+  if (password.length < 8) return "weak";
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[^A-Za-z0-9]/.test(password);
+  if (password.length >= 12 && hasUpper && hasLower && hasNumber && hasSpecial) return "strong";
+  return "fair";
+}
+
+const strengthConfig: Record<PasswordStrength, { label: string; value: number; color: string }> = {
+  weak: { label: "Weak", value: 33, color: "#ef4444" },
+  fair: { label: "Fair", value: 66, color: "#f59e0b" },
+  strong: { label: "Strong", value: 100, color: "#22c55e" },
+};
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -13,6 +37,10 @@ const ResetPassword = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isRecovery, setIsRecovery] = useState(false);
+
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const config = strengthConfig[strength];
+  const isWeak = strength === "weak";
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
@@ -27,7 +55,7 @@ const ResetPassword = () => {
     e.preventDefault();
     setError("");
 
-    if (password.length < 8) {
+    if (isWeak) {
       setError("Password must be at least 8 characters.");
       return;
     }
@@ -66,6 +94,17 @@ const ResetPassword = () => {
     );
   }
 
+  const submitButton = (
+    <Button
+      type="submit"
+      disabled={loading || isWeak}
+      className="w-full font-semibold h-11 rounded-xl"
+      style={{ background: isWeak ? undefined : "#3b6ef8" }}
+    >
+      {loading ? "Updating..." : "Reset Password"}
+    </Button>
+  );
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-secondary">
       <div className="w-full max-w-md rounded-2xl p-8 shadow-lg bg-card">
@@ -91,6 +130,19 @@ const ResetPassword = () => {
               required
               className="rounded-xl"
             />
+            {password.length > 0 && (
+              <div className="flex items-center gap-3 mt-1.5">
+                <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#e5e7eb" }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{ width: `${config.value}%`, background: config.color }}
+                  />
+                </div>
+                <span className="text-xs font-medium shrink-0" style={{ color: config.color }}>
+                  {config.label}
+                </span>
+              </div>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="confirmPassword" className="text-foreground">Confirm Password</Label>
@@ -107,13 +159,20 @@ const ResetPassword = () => {
           {error && (
             <p className="text-sm font-medium text-destructive">{error}</p>
           )}
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full font-semibold h-11 rounded-xl"
-          >
-            {loading ? "Updating..." : "Reset Password"}
-          </Button>
+          {isWeak && password.length > 0 ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="block">{submitButton}</span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your password is too weak to continue</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
+            submitButton
+          )}
         </form>
       </div>
     </div>
