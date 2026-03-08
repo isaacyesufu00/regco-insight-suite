@@ -51,6 +51,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Navigate to="/contact" replace />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about" element={<About />} />
             <Route path="/security" element={<Security />} />
             <Route path="/use-cases/mfb" element={<UseCaseMFB />} />

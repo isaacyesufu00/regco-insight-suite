@@ -213,13 +213,18 @@ const Login = () => {
             {loading ? "Signing in..." : "Login"}
           </Button>
         </form>
-        <p className="mt-6 text-center text-sm" style={{ color: "#8a8a9a" }}>
-          Access is by invitation only.{" "}
-          <Link to="/contact" className="font-semibold" style={{ color: "#3b6ef8" }}>
-            Book a demo
-          </Link>{" "}
-          to get started.
-        </p>
+        <div className="mt-6 text-center text-sm" style={{ color: "#8a8a9a" }}>
+          <Link to="/forgot-password" className="font-semibold" style={{ color: "#3b6ef8" }}>
+            Forgot your password?
+          </Link>
+          <p className="mt-2">
+            Access is by invitation only.{" "}
+            <Link to="/contact" className="font-semibold" style={{ color: "#3b6ef8" }}>
+              Book a demo
+            </Link>{" "}
+            to get started.
+          </p>
+        </div>
       </div>
     </div>
   );
