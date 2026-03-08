@@ -1,15 +1,41 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckCircle } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+type PasswordStrength = "weak" | "fair" | "strong";
+
+function getPasswordStrength(password: string): PasswordStrength {
+  if (password.length < 8) return "weak";
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[^A-Za-z0-9]/.test(password);
+  if (password.length >= 12 && hasUpper && hasLower && hasNumber && hasSpecial) return "strong";
+  return "fair";
+}
+
+const strengthConfig: Record<PasswordStrength, { label: string; value: number; color: string }> = {
+  weak: { label: "Weak", value: 33, color: "#ef4444" },
+  fair: { label: "Fair", value: 66, color: "#f59e0b" },
+  strong: { label: "Strong", value: 100, color: "#22c55e" },
+};
 
 const planLabels: Record<string, string> = {
   starter: "Starter",
   growth: "Growth",
 };
+
 const Signup = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -24,6 +50,10 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const config = strengthConfig[strength];
+  const isWeak = strength === "weak";
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -36,7 +66,7 @@ const Signup = () => {
       setError("Please fill in all fields.");
       return;
     }
-    if (password.length < 8) {
+    if (isWeak) {
       setError("Password must be at least 8 characters.");
       return;
     }
@@ -59,7 +89,6 @@ const Signup = () => {
     if (authError) {
       setError(authError.message);
     } else if (data.user && !data.session) {
-      // Email confirmation is required
       setError("");
       setShowConfirmation(true);
     } else {
@@ -85,6 +114,17 @@ const Signup = () => {
       </div>
     );
   }
+
+  const submitButton = (
+    <Button
+      type="submit"
+      disabled={loading || isWeak}
+      className="w-full text-white font-semibold h-11"
+      style={{ background: isWeak ? undefined : "#3b6ef8", borderRadius: 12 }}
+    >
+      {loading ? "Creating account..." : "Create Account"}
+    </Button>
+  );
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: "#eef2ff" }}>
@@ -122,6 +162,19 @@ const Signup = () => {
           <div className="space-y-2">
             <Label htmlFor="password" style={{ color: "#1a1a2e" }}>Password</Label>
             <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} style={{ borderRadius: 12 }} />
+            {password.length > 0 && (
+              <div className="flex items-center gap-3 mt-1.5">
+                <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#e5e7eb" }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{ width: `${config.value}%`, background: config.color }}
+                  />
+                </div>
+                <span className="text-xs font-medium shrink-0" style={{ color: config.color }}>
+                  {config.label}
+                </span>
+              </div>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="confirm" style={{ color: "#1a1a2e" }}>Confirm Password</Label>
@@ -130,14 +183,20 @@ const Signup = () => {
           {error && (
             <p className="text-sm font-medium" style={{ color: "#ef4444" }}>{error}</p>
           )}
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full text-white font-semibold h-11"
-            style={{ background: "#3b6ef8", borderRadius: 12 }}
-          >
-            {loading ? "Creating account..." : "Create Account"}
-          </Button>
+          {isWeak && password.length > 0 ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="block">{submitButton}</span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Your password is too weak to continue</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
+            submitButton
+          )}
         </form>
         <p className="mt-6 text-center text-sm" style={{ color: "#8a8a9a" }}>
           Already have an account?{" "}
