@@ -4,9 +4,6 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import RegCoLogo from "@/assets/RegCo_Logo.png";
-import { Menu, X, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
 
 const useCasesDropdown = [
   { label: "MFBs & Community Banks", href: "/use-cases/mfb" },
