@@ -2,47 +2,77 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import EnterpriseSalesModal from "@/components/EnterpriseSalesModal";
 
 const tiers = [
   {
-    name: "Starter",
-    planKey: "starter",
-    audience: "For small fintechs",
-    features: ["Basic reporting tools", "Limited submissions", "Email support", "Standard dashboard"],
+    name: "Unit MFB",
+    planKey: "unit",
+    audience: "For unit microfinance banks",
+    features: ["Basic CBN returns", "Single-user access", "Email support", "Standard dashboard"],
     cta: "Contact Sales",
     highlight: false,
-    message: "I am interested in the Starter plan for small fintechs. Please contact me to discuss pricing.",
+    message: "I am interested in the Unit MFB plan. Please contact me to discuss pricing.",
   },
   {
-    name: "Growth",
-    planKey: "growth",
-    audience: "For scaling institutions",
-    features: ["Advanced reporting", "Monitoring dashboard", "Priority support", "Multi-user access"],
+    name: "State MFB",
+    planKey: "state",
+    audience: "For state microfinance banks",
+    features: ["All CBN & NFIU returns", "Multi-user access", "Priority support", "Compliance monitoring"],
     cta: "Contact Sales",
     highlight: true,
-    message: "I am interested in the Growth plan for scaling institutions. Please contact me to discuss pricing.",
+    message: "I am interested in the State MFB plan. Please contact me to discuss pricing.",
   },
   {
-    name: "Enterprise",
-    planKey: "enterprise",
-    audience: "For large banks",
+    name: "Commercial Bank",
+    planKey: "commercial",
+    audience: "For commercial banks",
     features: ["Full compliance suite", "Dedicated compliance specialist", "Custom integrations", "SLA guarantee"],
     cta: "Contact Sales",
     highlight: false,
-    message: "I am interested in the Enterprise plan for large banks. Please contact me to discuss pricing.",
+    message: "I am interested in the Commercial Bank plan. Please contact me to discuss pricing.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Is my institution's data secure?",
+    a: "Yes. All data is encrypted at rest using AES-256 and in transit using TLS 1.3. We operate under a strict Data Processing Agreement and are aligned with NDPC guidelines. Your data is never shared or used for any purpose other than generating your regulatory returns.",
+  },
+  {
+    q: "Which core banking systems do you support?",
+    a: "RegCo accepts standard CSV and Excel exports from any core banking system. If your CBS can export data, RegCo can process it. We support Flexcube, Temenos, Finacle, and custom CBS exports.",
+  },
+  {
+    q: "How long does onboarding take?",
+    a: "Most institutions are fully onboarded and generating their first report within 7 days of signing. There is no technical installation required on your end.",
+  },
+  {
+    q: "Do I need a dedicated IT team to use RegCo?",
+    a: "No. RegCo is designed for compliance officers, not IT staff. If you can use email and upload a file, you can use RegCo.",
+  },
+  {
+    q: "What happens if I need help with a submission?",
+    a: "Every RegCo client has a dedicated compliance support contact. You can reach us via email or WhatsApp during business hours.",
+  },
+  {
+    q: "Can I see a sample report before signing up?",
+    a: "Yes. Book a free demo and we will walk you through a live report generation using fictional but realistic data so you can see exactly what your submissions will look like.",
   },
 ];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: (i: number) => ({
-    opacity: 1, y: 0,
+    opacity: 1,
+    y: 0,
     transition: { duration: 0.45, delay: i * 0.1 },
   }),
 };
 
-const CUSTOM_QUOTE_MESSAGE = "I would like to request a custom quote for RegCo. Please contact me to discuss my institution's specific needs.";
+const CUSTOM_QUOTE_MESSAGE =
+  "I would like to request a custom quote for RegCo. Please contact me to discuss my institution's specific needs.";
 
 const PricingSection = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -57,6 +87,23 @@ const PricingSection = () => {
     <>
       <section id="pricing" className="py-20 md:py-28 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
+          {/* Penalty Highlight Banner */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={fadeUp}
+            custom={0}
+            className="rounded-2xl bg-foreground text-background p-8 md:p-10 text-center mb-14 max-w-4xl mx-auto"
+          >
+            <p className="text-lg md:text-xl font-bold font-display leading-relaxed">
+              One CBN regulatory sanction starts at{" "}
+              <span className="text-warning">₦2,000,000</span>.<br />
+              RegCo starts at way less.{" "}
+              <span className="text-warning">It is not a cost — it is insurance.</span>
+            </p>
+          </motion.div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -122,6 +169,25 @@ const PricingSection = () => {
             >
               Request Custom Quote
             </Button>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="max-w-3xl mx-auto mt-20">
+            <h2 className="text-3xl md:text-4xl font-bold font-display text-foreground text-center mb-10">
+              Frequently Asked Questions
+            </h2>
+            <Accordion type="single" collapsible className="space-y-3">
+              {faqs.map((faq, i) => (
+                <AccordionItem key={i} value={`faq-${i}`} className="card-elevated rounded-xl border border-border/50 px-6">
+                  <AccordionTrigger className="text-sm font-semibold text-foreground hover:no-underline py-5">
+                    {faq.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground pb-5 leading-relaxed">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </section>

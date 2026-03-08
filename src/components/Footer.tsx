@@ -9,7 +9,7 @@ const columns: { title: string; links: FooterLink[] }[] = [
       { label: "Reports", to: "/features/report-generation" },
       { label: "Monitoring", to: "/features/monitoring" },
       { label: "Dashboard", to: "/features/dashboard" },
-      { label: "Pricing", to: "/" },
+      { label: "Pricing", to: "/#pricing" },
     ],
   },
   {
@@ -64,8 +64,11 @@ const Footer = () => (
           </div>
         ))}
       </div>
-      <div className="mt-12 pt-6 border-t border-border text-center">
+      <div className="mt-12 pt-6 border-t border-border text-center space-y-2">
         <p className="text-sm text-muted-foreground">© 2026 RegCo. All rights reserved.</p>
+        <p className="text-xs text-muted-foreground/70">
+          RegCo is not affiliated with the Central Bank of Nigeria. All regulatory return formats are based on publicly available CBN guidelines.
+        </p>
       </div>
     </div>
   </footer>

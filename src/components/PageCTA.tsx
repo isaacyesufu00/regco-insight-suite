@@ -35,7 +35,7 @@ const PageCTA = ({
             </h2>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Button asChild size="lg" className="rounded-full px-8 text-base font-semibold hover:scale-[1.02] transition-transform">
-                <Link to="/contact">{primaryLabel}</Link>
+                <Link to="/book-demo">{primaryLabel}</Link>
               </Button>
               {showDemo && (
                 <Button
