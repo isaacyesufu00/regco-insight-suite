@@ -36,6 +36,8 @@ import FeatureMonitoring from "./pages/FeatureMonitoring";
 import SupportTickets from "./pages/SupportTickets";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
