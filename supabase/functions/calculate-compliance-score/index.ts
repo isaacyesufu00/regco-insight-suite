@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 Deno.serve(async (req) => {
@@ -11,13 +11,33 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { user_id } = await req.json();
-    if (!user_id) {
-      return new Response(JSON.stringify({ error: "user_id required" }), { status: 400, headers: corsHeaders });
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
+    // Validate JWT
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const anonClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: claimsData, error: claimsError } = await anonClient.auth.getClaims(token);
+    if (claimsError || !claimsData?.claims) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+    }
+
+    // Derive user_id from verified token — never trust caller-supplied user_id
+    const user_id = claimsData.claims.sub;
+    if (!user_id) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
+    }
+
+    // Use service role client for data operations
     const supabase = createClient(supabaseUrl, serviceKey);
 
     // Get assigned report types for user
@@ -42,7 +62,6 @@ Deno.serve(async (req) => {
     const currentMonth = now.getMonth();
     const currentYear = now.getFullYear();
 
-    // Determine current reporting period boundaries
     const currentPeriodStart = new Date(currentYear, currentMonth - 1, 1);
     const previousPeriodStart = new Date(currentYear, currentMonth - 2, 1);
 
@@ -59,13 +78,11 @@ Deno.serve(async (req) => {
       const typeReports = (reports || []).filter((r) => r.report_type === report_type);
       const latestReport = typeReports[0] || null;
 
-      // Check if there's a submission in the current reporting period
       const hasCurrentSubmission = typeReports.some((r) => {
         const created = new Date(r.created_at);
         return created >= currentPeriodStart;
       });
 
-      // Check for two consecutive missing periods
       const hasPreviousSubmission = typeReports.some((r) => {
         const created = new Date(r.created_at);
         return created >= previousPeriodStart && created < currentPeriodStart;
@@ -135,6 +152,6 @@ Deno.serve(async (req) => {
 
     return new Response(JSON.stringify({ score, breakdown }), { headers: corsHeaders });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: corsHeaders });
+    return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500, headers: corsHeaders });
   }
 });
