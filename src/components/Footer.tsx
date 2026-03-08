@@ -1,15 +1,32 @@
-const columns = [
+import { Link } from "react-router-dom";
+
+type FooterLink = { label: string; to: string | null };
+
+const columns: { title: string; links: FooterLink[] }[] = [
   {
     title: "Product",
-    links: ["Reports", "Monitoring", "Dashboard", "Pricing"],
+    links: [
+      { label: "Reports", to: "/features/report-generation" },
+      { label: "Monitoring", to: "/features/monitoring" },
+      { label: "Dashboard", to: "/features/dashboard" },
+      { label: "Pricing", to: "/" },
+    ],
   },
   {
     title: "Company",
-    links: ["About", "Careers", "Contact"],
+    links: [
+      { label: "About", to: "/about" },
+      { label: "Careers", to: null },
+      { label: "Contact", to: "/contact" },
+    ],
   },
   {
     title: "Legal",
-    links: ["Privacy Policy", "Terms", "Security Policy"],
+    links: [
+      { label: "Privacy Policy", to: "/privacy-policy" },
+      { label: "Terms", to: "/terms" },
+      { label: "Security Policy", to: "/security" },
+    ],
   },
 ];
 
@@ -28,10 +45,19 @@ const Footer = () => (
             <h4 className="text-sm font-semibold text-foreground mb-3">{col.title}</h4>
             <ul className="space-y-2">
               {col.links.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  {link.to ? (
+                    <Link
+                      to={link.to}
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <span className="text-sm text-muted-foreground cursor-default">
+                      {link.label}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
