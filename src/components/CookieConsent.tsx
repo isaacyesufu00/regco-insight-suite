@@ -22,10 +22,8 @@ const CookieConsent = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[90] bg-foreground p-4 md:p-5">
-      <div className="container mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="text-sm text-center sm:text-left">
-          We use cookies to improve your experience. By continuing to use this site you accept our cookie policy.
+    <div className="fixed bottom-0 left-0 right-0 z-[90] bg-foreground    <div className="container mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-sm text-center sm:text-lbackground text-center sm:text-left leading-relaxeduse cookies to improve your experience. By continuing to use this site you accept our cookie policy.
         </p>
         <div className="flex items-center gap-3 shrink-0">
           <Button
