@@ -149,7 +149,7 @@ const Login = () => {
             {countdown}
           </div>
           <Button asChild variant="outline" className="rounded-full px-6">
-            <Link to="/contact">Forgot Password</Link>
+            <Link to="/forgot-password">Forgot Password</Link>
           </Button>
         </div>
       </div>
