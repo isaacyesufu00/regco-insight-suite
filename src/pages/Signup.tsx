@@ -51,10 +51,12 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isCompromised, setIsCompromised] = useState(false);
 
-  const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const baseStrength = useMemo(() => getPasswordStrength(password), [password]);
+  const strength = isCompromised ? "compromised" : baseStrength;
   const config = strengthConfig[strength];
-  const isWeak = strength === "weak";
+  const isWeak = baseStrength === "weak";
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
