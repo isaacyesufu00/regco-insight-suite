@@ -1,3 +1,5 @@
+import RegCoLogo from "@/assets/RegCo_Logo.png";
+
 const columns = [
   {
     title: "Product",
