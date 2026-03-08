@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/tooltip";
 import RegCoLogo from "@/assets/RegCo_Logo.png";
 
-type PasswordStrength = "weak" | "fair" | "strong";
+type PasswordStrength = "weak" | "fair" | "strong" | "compromised";
 
 function getPasswordStrength(password: string): PasswordStrength {
   if (password.length < 8) return "weak";
@@ -30,6 +30,7 @@ const strengthConfig: Record<PasswordStrength, { label: string; value: number; c
   weak: { label: "Weak", value: 33, color: "#ef4444" },
   fair: { label: "Fair", value: 66, color: "#f59e0b" },
   strong: { label: "Strong", value: 100, color: "#22c55e" },
+  compromised: { label: "Compromised — this password is not safe to use", value: 100, color: "#7f1d1d" },
 };
 
 const planLabels: Record<string, string> = {
