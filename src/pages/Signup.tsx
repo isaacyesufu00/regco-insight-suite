@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/tooltip";
 import RegCoLogo from "@/assets/RegCo_Logo.png";
 
-type PasswordStrength = "weak" | "fair" | "strong";
+type PasswordStrength = "weak" | "fair" | "strong" | "compromised";
 
 function getPasswordStrength(password: string): PasswordStrength {
   if (password.length < 8) return "weak";
@@ -30,6 +30,7 @@ const strengthConfig: Record<PasswordStrength, { label: string; value: number; c
   weak: { label: "Weak", value: 33, color: "#ef4444" },
   fair: { label: "Fair", value: 66, color: "#f59e0b" },
   strong: { label: "Strong", value: 100, color: "#22c55e" },
+  compromised: { label: "Compromised — this password is not safe to use", value: 100, color: "#7f1d1d" },
 };
 
 const planLabels: Record<string, string> = {
@@ -50,10 +51,12 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isCompromised, setIsCompromised] = useState(false);
 
-  const strength = useMemo(() => getPasswordStrength(password), [password]);
+  const baseStrength = useMemo(() => getPasswordStrength(password), [password]);
+  const strength = isCompromised ? "compromised" : baseStrength;
   const config = strengthConfig[strength];
-  const isWeak = strength === "weak";
+  const isWeak = baseStrength === "weak";
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +91,12 @@ const Signup = () => {
     setLoading(false);
 
     if (authError) {
-      setError(authError.message);
+      if (authError.message?.toLowerCase().includes("leaked") || authError.message?.toLowerCase().includes("pwned") || authError.message?.toLowerCase().includes("breach")) {
+        setIsCompromised(true);
+        setError("This password has appeared in a known data breach and cannot be used. Please choose a different password to keep your account secure.");
+      } else {
+        setError(authError.message);
+      }
     } else if (data.user && !data.session) {
       setError("");
       setShowConfirmation(true);
@@ -158,7 +166,8 @@ const Signup = () => {
           </div>
           <div className="space-y-2">
             <Label htmlFor="password" style={{ color: "#1a1a2e" }}>Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} style={{ borderRadius: 12 }} />
+            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => { setPassword(e.target.value); setIsCompromised(false); }} required minLength={8} style={{ borderRadius: 12 }} />
+            <p className="text-xs" style={{ color: "#8a8a9a" }}>Use a unique password you have not used on any other website.</p>
             {password.length > 0 && (
               <div className="flex items-center gap-3 mt-1.5">
                 <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#e5e7eb" }}>

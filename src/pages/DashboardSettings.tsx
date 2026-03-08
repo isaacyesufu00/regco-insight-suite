@@ -79,7 +79,14 @@ const DashboardSettings = () => {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     setChangingPw(false);
     if (error) {
-      toast({ title: "Something went wrong", description: "We couldn't update your password. Please try again.", variant: "destructive" });
+      const isLeaked = error.message?.toLowerCase().includes("leaked") || error.message?.toLowerCase().includes("pwned") || error.message?.toLowerCase().includes("breach");
+      toast({
+        title: isLeaked ? "Password compromised" : "Something went wrong",
+        description: isLeaked
+          ? "This password has appeared in a known data breach and cannot be used. Please choose a different password to keep your account secure."
+          : "We couldn't update your password. Please try again.",
+        variant: "destructive",
+      });
     } else {
       toast({ title: "Password updated", description: "Your password has been changed successfully." });
       setCurrentPassword("");
@@ -144,6 +151,7 @@ const DashboardSettings = () => {
             <div className="space-y-2">
               <Label>New Password</Label>
               <Input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} minLength={8} />
+              <p className="text-xs text-muted-foreground">Use a unique password you have not used on any other website.</p>
             </div>
             <div className="space-y-2">
               <Label>Confirm New Password</Label>
