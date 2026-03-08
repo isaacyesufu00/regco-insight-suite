@@ -13,87 +13,89 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [attemptCount, setAttemptCount] = useState(0);
-  const [lockedUntil, setLockedUntil] = useState<Date | null>(null);
-  const [countdown, setCountdown] = useState("");
+  const [secondsLeft, setSecondsLeft] = useState(0);
 
-  const isLocked = lockedUntil && lockedUntil > new Date();
+  const isLocked = secondsLeft > 0;
 
   // Countdown timer
   useEffect(() => {
-    if (!lockedUntil) return;
-    const tick = () => {
-      const diff = lockedUntil.getTime() - Date.now();
-      if (diff <= 0) {
-        setLockedUntil(null);
-        setAttemptCount(0);
-        setCountdown("");
-        // Reset in DB
-        if (email.trim()) {
-          supabase
-            .from("login_attempts")
-            .update({ attempt_count: 0, locked_until: null })
-            .eq("email", email.trim().toLowerCase())
-            .then();
+    if (secondsLeft <= 0) return;
+    const interval = setInterval(() => {
+      setSecondsLeft((prev) => {
+        if (prev <= 1) {
+          // Lock expired — re-check via edge function
+          const trimmed = email.trim().toLowerCase();
+          if (trimmed) {
+            supabase.functions
+              .invoke("check-login-lockout", { body: { email: trimmed } })
+              .then(({ data }) => {
+                if (data && !data.is_locked) {
+                  setAttemptCount(0);
+                }
+              });
+          }
+          return 0;
         }
-        return;
-      }
-      const mins = Math.floor(diff / 60000);
-      const secs = Math.floor((diff % 60000) / 1000);
-      setCountdown(`${mins}:${secs.toString().padStart(2, "0")}`);
-    };
-    tick();
-    const interval = setInterval(tick, 1000);
+        return prev - 1;
+      });
+    }, 1000);
     return () => clearInterval(interval);
-  }, [lockedUntil, email]);
+  }, [secondsLeft, email]);
 
-  const checkLockStatus = useCallback(async (emailAddr: string) => {
-    const { data } = await supabase
-      .from("login_attempts")
-      .select("attempt_count, locked_until")
-      .eq("email", emailAddr)
-      .maybeSingle();
-    if (data) {
-      setAttemptCount(data.attempt_count ?? 0);
-      if (data.locked_until && new Date(data.locked_until) > new Date()) {
-        setLockedUntil(new Date(data.locked_until));
-        return true;
+  const formatCountdown = (secs: number) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
+
+  const checkLockStatus = useCallback(async (emailAddr: string): Promise<boolean> => {
+    try {
+      const { data } = await supabase.functions.invoke("check-login-lockout", {
+        body: { email: emailAddr },
+      });
+      if (data) {
+        setAttemptCount(data.attempt_count ?? 0);
+        if (data.is_locked && data.seconds_remaining > 0) {
+          setSecondsLeft(data.seconds_remaining);
+          return true;
+        }
       }
+    } catch {
+      // If check fails, allow login attempt
     }
     return false;
   }, []);
 
   const recordFailedAttempt = async (emailAddr: string) => {
-    const { data: existing } = await supabase
-      .from("login_attempts")
-      .select("id, attempt_count")
-      .eq("email", emailAddr)
-      .maybeSingle();
-
-    const newCount = (existing?.attempt_count ?? 0) + 1;
-    const lockTime = newCount >= 5 ? new Date(Date.now() + 15 * 60 * 1000).toISOString() : null;
-
-    if (existing) {
-      await supabase
-        .from("login_attempts")
-        .update({ attempt_count: newCount, locked_until: lockTime, last_attempt_at: new Date().toISOString() })
-        .eq("id", existing.id);
-    } else {
-      await supabase
-        .from("login_attempts")
-        .insert({ email: emailAddr, attempt_count: newCount, locked_until: lockTime, last_attempt_at: new Date().toISOString() });
+    try {
+      const { data } = await supabase.functions.invoke("record-login-attempt", {
+        body: { email: emailAddr },
+      });
+      if (data) {
+        setAttemptCount(data.attempt_count ?? 0);
+        if (data.is_locked && data.seconds_remaining > 0) {
+          setSecondsLeft(data.seconds_remaining);
+        }
+      }
+    } catch {
+      // Silent fail — don't block login UX
     }
-
-    setAttemptCount(newCount);
-    if (lockTime) setLockedUntil(new Date(lockTime));
   };
 
-  const resetAttempts = async (emailAddr: string) => {
-    await supabase
-      .from("login_attempts")
-      .update({ attempt_count: 0, locked_until: null })
-      .eq("email", emailAddr);
+  const resetAttempts = async () => {
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (token) {
+        await supabase.functions.invoke("reset-login-attempts", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+    } catch {
+      // Silent fail
+    }
     setAttemptCount(0);
-    setLockedUntil(null);
+    setSecondsLeft(0);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -127,7 +129,7 @@ const Login = () => {
         setError(authError.message);
       }
     } else {
-      await resetAttempts(trimmedEmail);
+      await resetAttempts();
       navigate("/dashboard");
     }
   };
@@ -147,7 +149,7 @@ const Login = () => {
             Your account has been temporarily locked for security reasons. Please try again in 15 minutes or click Forgot Password to reset your credentials.
           </p>
           <div className="text-3xl font-mono font-bold mb-6" style={{ color: "#ef4444" }}>
-            {countdown}
+            {formatCountdown(secondsLeft)}
           </div>
           <Button asChild variant="outline" className="rounded-full px-6">
             <Link to="/contact">Forgot Password</Link>
