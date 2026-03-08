@@ -91,7 +91,12 @@ const Signup = () => {
     setLoading(false);
 
     if (authError) {
-      setError(authError.message);
+      if (authError.message?.toLowerCase().includes("leaked") || authError.message?.toLowerCase().includes("pwned") || authError.message?.toLowerCase().includes("breach")) {
+        setIsCompromised(true);
+        setError("This password has appeared in a known data breach and cannot be used. Please choose a different password to keep your account secure.");
+      } else {
+        setError(authError.message);
+      }
     } else if (data.user && !data.session) {
       setError("");
       setShowConfirmation(true);
