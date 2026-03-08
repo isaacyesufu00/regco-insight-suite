@@ -1,4 +1,5 @@
-import { Home, FileText, FilePlus, Settings, LogOut, Building2, Database, CalendarDays, LifeBuoy } from "lucide-react";
+import { Home, FileText, FilePlus, Settings, LogOut, Database, CalendarDays, LifeBuoy } from "lucide-react";
+import RegCoLogo from "@/assets/RegCo_Logo.png";
 import { NavLink } from "@/components/NavLink";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
