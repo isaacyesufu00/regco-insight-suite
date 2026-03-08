@@ -46,8 +46,8 @@ export function DashboardSidebar({ companyName }: DashboardSidebarProps) {
       <SidebarContent>
         {/* Brand */}
         <div className="p-4 border-b border-sidebar-border">
-          <div className="flex items-center gap-2">
-            <img src={RegCoLogo} alt="RegCo" style={{ width: 32, height: 32, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <img src={RegCoLogo} alt="RegCo" style={{ width: 160, height: 40, minWidth: 160, minHeight: 40, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
             {!collapsed && (
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-sidebar-foreground truncate">

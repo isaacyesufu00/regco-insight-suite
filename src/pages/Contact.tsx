@@ -83,8 +83,8 @@ const Contact = () => {
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={{ background: "#eef2ff" }}>
       <div className="w-full max-w-lg rounded-2xl p-8 shadow-lg" style={{ background: "#ffffff" }}>
         <div className="text-center mb-6">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <img src={RegCoLogo} alt="RegCo" style={{ width: 120, height: 34, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
+          <Link to="/" className="inline-flex items-center gap-2 mb-4 flex-shrink-0">
+            <img src={RegCoLogo} alt="RegCo" style={{ width: 160, height: 40, minWidth: 160, minHeight: 40, objectFit: "contain", objectPosition: "center", display: "block", flexShrink: 0, background: "transparent" }} />
           </Link>
         </div>
 
