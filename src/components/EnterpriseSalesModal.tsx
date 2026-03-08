@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CheckCircle, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import RegCoLogo from "@/assets/RegCo_Logo.png";
 
 const institutionTypes = [
   "Commercial Bank",
