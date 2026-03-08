@@ -5,10 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import CookieConsent from "@/components/CookieConsent";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import { Navigate } from "react-router-dom";
 import Contact from "./pages/Contact";
+import BookDemo from "./pages/BookDemo";
 import Dashboard from "./pages/Dashboard";
 import DashboardHome from "./pages/DashboardHome";
 import NewReport from "./pages/NewReport";
@@ -24,6 +26,8 @@ import AdminDemos from "./pages/AdminDemos";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import Security from "./pages/Security";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
 import UseCaseMFB from "./pages/UseCaseMFB";
 import UseCaseCommercial from "./pages/UseCaseCommercial";
 import UseCaseFinance from "./pages/UseCaseFinance";
@@ -36,8 +40,6 @@ import FeatureMonitoring from "./pages/FeatureMonitoring";
 import SupportTickets from "./pages/SupportTickets";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -51,8 +53,9 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Navigate to="/contact" replace />} />
+            <Route path="/signup" element={<Navigate to="/book-demo" replace />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/book-demo" element={<BookDemo />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about" element={<About />} />
@@ -100,6 +103,7 @@ const App = () => (
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <CookieConsent />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
