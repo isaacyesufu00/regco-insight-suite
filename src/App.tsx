@@ -36,6 +36,8 @@ import FeatureMonitoring from "./pages/FeatureMonitoring";
 import SupportTickets from "./pages/SupportTickets";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +57,8 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about" element={<About />} />
             <Route path="/security" element={<Security />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
             <Route path="/use-cases/mfb" element={<UseCaseMFB />} />
             <Route path="/use-cases/commercial" element={<UseCaseCommercial />} />
             <Route path="/use-cases/finance" element={<UseCaseFinance />} />
