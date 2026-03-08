@@ -34,6 +34,8 @@ import FeatureDashboard from "./pages/FeatureDashboard";
 import FeatureDataSources from "./pages/FeatureDataSources";
 import FeatureMonitoring from "./pages/FeatureMonitoring";
 import SupportTickets from "./pages/SupportTickets";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +51,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Navigate to="/contact" replace />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/about" element={<About />} />
             <Route path="/security" element={<Security />} />
             <Route path="/use-cases/mfb" element={<UseCaseMFB />} />
