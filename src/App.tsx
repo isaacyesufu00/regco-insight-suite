@@ -34,6 +34,8 @@ import FeatureDashboard from "./pages/FeatureDashboard";
 import FeatureDataSources from "./pages/FeatureDataSources";
 import FeatureMonitoring from "./pages/FeatureMonitoring";
 import SupportTickets from "./pages/SupportTickets";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
