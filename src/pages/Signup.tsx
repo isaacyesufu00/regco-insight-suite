@@ -166,7 +166,8 @@ const Signup = () => {
           </div>
           <div className="space-y-2">
             <Label htmlFor="password" style={{ color: "#1a1a2e" }}>Password</Label>
-            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} style={{ borderRadius: 12 }} />
+            <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => { setPassword(e.target.value); setIsCompromised(false); }} required minLength={8} style={{ borderRadius: 12 }} />
+            <p className="text-xs" style={{ color: "#8a8a9a" }}>Use a unique password you have not used on any other website.</p>
             {password.length > 0 && (
               <div className="flex items-center gap-3 mt-1.5">
                 <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "#e5e7eb" }}>

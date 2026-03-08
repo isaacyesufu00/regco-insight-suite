@@ -151,6 +151,7 @@ const DashboardSettings = () => {
             <div className="space-y-2">
               <Label>New Password</Label>
               <Input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} minLength={8} />
+              <p className="text-xs text-muted-foreground">Use a unique password you have not used on any other website.</p>
             </div>
             <div className="space-y-2">
               <Label>Confirm New Password</Label>
