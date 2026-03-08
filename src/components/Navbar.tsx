@@ -160,8 +160,8 @@ const Navbar = () => {
           <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Login
           </Link>
-          <Button asChild size="sm" variant="outline" className="rounded-full px-5 border-foreground/20 text-foreground font-medium hover:scale-[1.02] transition-transform">
-            <Link to="/contact">Book a Demo</Link>
+          <Button asChild size="sm" className="rounded-full px-5 font-medium hover:scale-[1.02] transition-transform">
+            <Link to="/book-demo">Book a Demo</Link>
           </Button>
         </div>
 
@@ -217,7 +217,7 @@ const Navbar = () => {
                 </div>
               )}
 
-              <Link to="/#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground py-2" onClick={() => { setMobileOpen(false); handlePricingClick; }}>
+              <Link to="/#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground py-2" onClick={() => { setMobileOpen(false); }}>
                 Pricing
               </Link>
               <Link to="/security" className="text-sm font-medium text-muted-foreground hover:text-foreground py-2" onClick={() => setMobileOpen(false)}>
@@ -231,8 +231,8 @@ const Navbar = () => {
                 <Button asChild variant="ghost" size="sm">
                   <Link to="/login" onClick={() => setMobileOpen(false)}>Login</Link>
                 </Button>
-                <Button asChild size="sm" variant="outline" className="rounded-full">
-                  <Link to="/contact" onClick={() => setMobileOpen(false)}>Book a Demo</Link>
+                <Button asChild size="sm" className="rounded-full">
+                  <Link to="/book-demo" onClick={() => setMobileOpen(false)}>Book a Demo</Link>
                 </Button>
               </div>
             </div>
