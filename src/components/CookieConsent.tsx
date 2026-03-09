@@ -30,7 +30,7 @@ const CookieConsent = () => {
           <Button
             size="sm"
             asChild
-            className="rounded-full"
+            className="rounded-full bg-background text-foreground hover:bg-background/90"
           >
             <Link to="/privacy-policy">Learn More</Link>
           </Button>
