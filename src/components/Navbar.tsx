@@ -141,7 +141,6 @@ const Navbar = () => {
 
           <Link
             to="/security"
-            onClick={handleSecurityClick}
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             Security
