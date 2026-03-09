@@ -137,7 +137,7 @@ const Navbar = () => {
             to="/security"
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            Security
+            Security Policy
           </Link>
 
           <Link
