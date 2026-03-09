@@ -29,10 +29,9 @@ const CookieConsent = () => {
         </p>
         <div className="flex items-center gap-3 shrink-0">
           <Button
-            variant="outline"
             size="sm"
             asChild
-            className="rounded-full border-background/30 text-background hover:bg-background/10"
+            className="rounded-full"
           >
             <Link to="/privacy-policy">Learn More</Link>
           </Button>
