@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import regcoLogo from "@/assets/regco-logo.png";
 
 type FooterLink = { label: string; to: string | null };
 
