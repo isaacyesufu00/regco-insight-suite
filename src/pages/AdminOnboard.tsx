@@ -103,8 +103,8 @@ const AdminOnboard = () => {
       </CardHeader>
       <CardContent>
         {successEmail && (
-          <Alert className="mb-6 border-green-500 bg-green-50 text-green-800">
-            <CheckCircle2 className="h-4 w-4 text-green-600" />
+          <Alert className="mb-6 border-primary bg-primary/10 text-primary">
+            <CheckCircle2 className="h-4 w-4" />
             <AlertDescription>
               Client onboarded successfully. Welcome email sent to {successEmail}.
             </AlertDescription>
