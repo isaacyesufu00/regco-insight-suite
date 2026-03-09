@@ -4,21 +4,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 
 const LICENSE_CATEGORIES = [
-  "Commercial Bank",
-  "Merchant Bank",
-  "National MFB",
-  "State MFB",
   "Unit MFB",
-  "Finance Company",
-  "Other",
+  "State MFB",
+  "National MFB",
+  "Commercial Bank",
 ];
 
 const ALL_REPORT_TYPES = [
@@ -26,32 +21,23 @@ const ALL_REPORT_TYPES = [
   "CBN Forex Return",
   "AML/CFT Report",
   "NFIU Regulatory Return",
-  "Prudential Return",
   "MFB Regulatory Return",
+  "Prudential Return",
   "SCUML Compliance Report",
 ];
 
-interface SuccessData {
-  institution_name: string;
-  report_types: string[];
-  email_sent: boolean;
-}
-
 const AdminOnboard = () => {
-  const { toast } = useToast();
-
   const [form, setForm] = useState({
+    compliance_lead_name: "",
+    email: "",
     institution_name: "",
     rc_number: "",
     cbn_license_category: "",
-    compliance_lead_name: "",
-    email: "",
-    phone: "",
-    onboarding_notes: "",
   });
   const [reportTypes, setReportTypes] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState<SuccessData | null>(null);
+  const [successEmail, setSuccessEmail] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const updateField = (field: string, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -63,123 +49,127 @@ const AdminOnboard = () => {
     );
   };
 
+  const resetForm = () => {
+    setForm({
+      compliance_lead_name: "",
+      email: "",
+      institution_name: "",
+      rc_number: "",
+      cbn_license_category: "",
+    });
+    setReportTypes([]);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (reportTypes.length === 0) {
-      toast({ title: "Please select at least one report type", variant: "destructive" });
-      return;
-    }
+    setSuccessEmail(null);
+    setErrorMessage(null);
     setSubmitting(true);
 
     try {
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData.session?.access_token;
-
-      const res = await fetch(
-        `https://pdplkprcomjslilznbsl.supabase.co/functions/v1/onboard-client`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            ...form,
-            report_types: reportTypes,
-          }),
+      const { data, error } = await supabase.functions.invoke('onboard-client', {
+        body: {
+          email: form.email,
+          institution_name: form.institution_name,
+          compliance_lead_name: form.compliance_lead_name,
+          rc_number: form.rc_number,
+          cbn_license_category: form.cbn_license_category,
+          report_types: reportTypes,
         }
-      );
+      });
 
-      const result = await res.json();
-
-      if (!res.ok) {
-        throw new Error(result.error || "Onboarding failed");
+      if (error) {
+        throw new Error(error.message || "Onboarding failed");
       }
 
-      setSuccess({
-        institution_name: result.institution_name,
-        report_types: result.report_types,
-        email_sent: result.email_sent,
-      });
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+
+      setSuccessEmail(form.email);
+      resetForm();
     } catch (err: any) {
-      toast({
-        title: "Onboarding failed",
-        description: err.message,
-        variant: "destructive",
-      });
+      setErrorMessage("Onboarding failed. Please try again or contact support.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const resetForm = () => {
-    setForm({
-      institution_name: "",
-      rc_number: "",
-      cbn_license_category: "",
-      compliance_lead_name: "",
-      email: "",
-      phone: "",
-      onboarding_notes: "",
-    });
-    setReportTypes([]);
-    setSuccess(null);
-  };
-
-  if (success) {
-    return (
-      <Card className="max-w-lg mx-auto">
-        <CardContent className="pt-8 text-center space-y-6">
-          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-8 h-8 text-primary" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-foreground mb-1">Client Onboarded Successfully</h2>
-            <p className="text-muted-foreground">{success.institution_name} is now on RegCo.</p>
-          </div>
-          <div className="text-left space-y-2">
-            <p className="text-sm font-medium text-foreground">Assigned Report Types:</p>
-            <div className="flex flex-wrap gap-2">
-              {success.report_types.map((rt) => (
-                <Badge key={rt} variant="secondary">{rt}</Badge>
-              ))}
-            </div>
-          </div>
-          <div className="flex items-center gap-2 justify-center text-sm text-muted-foreground">
-            <CheckCircle2 className="w-4 h-4 text-primary" />
-            {success.email_sent
-              ? "Welcome email sent to the compliance lead."
-              : "Welcome email could not be sent. Share the login link manually."}
-          </div>
-          <Button onClick={resetForm} className="w-full">Onboard Another Client</Button>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <Card className="max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Onboard New Client</CardTitle>
-        <CardDescription>Register a new institution on the RegCo platform. A welcome email with a password setup link will be sent automatically.</CardDescription>
+        <CardDescription>Register a new institution on the RegCo platform.</CardDescription>
       </CardHeader>
       <CardContent>
+        {successEmail && (
+          <Alert className="mb-6 border-primary bg-primary/10 text-primary">
+            <CheckCircle2 className="h-4 w-4" />
+            <AlertDescription>
+              Client onboarded successfully. Welcome email sent to {successEmail}.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {errorMessage && (
+          <Alert className="mb-6 border-destructive bg-destructive/10 text-destructive">
+            <XCircle className="h-4 w-4" />
+            <AlertDescription>{errorMessage}</AlertDescription>
+          </Alert>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Institution Name *</Label>
-              <Input value={form.institution_name} onChange={(e) => updateField("institution_name", e.target.value)} required maxLength={200} placeholder="e.g. First Microfinance Bank" />
-            </div>
-            <div className="space-y-2">
-              <Label>RC Number *</Label>
-              <Input value={form.rc_number} onChange={(e) => updateField("rc_number", e.target.value)} required maxLength={50} placeholder="RC123456" />
-            </div>
+          <div className="space-y-2">
+            <Label>Full Name (Compliance Lead) *</Label>
+            <Input
+              value={form.compliance_lead_name}
+              onChange={(e) => updateField("compliance_lead_name", e.target.value)}
+              required
+              placeholder="John Doe"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Email Address *</Label>
+            <Input
+              type="email"
+              value={form.email}
+              onChange={(e) => updateField("email", e.target.value)}
+              required
+              placeholder="john@example.com"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Institution Name *</Label>
+            <Input
+              value={form.institution_name}
+              onChange={(e) => updateField("institution_name", e.target.value)}
+              required
+              placeholder="First Microfinance Bank"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label>RC Number *</Label>
+            <Input
+              value={form.rc_number}
+              onChange={(e) => updateField("rc_number", e.target.value)}
+              required
+              placeholder="RC123456"
+            />
           </div>
 
           <div className="space-y-2">
             <Label>CBN License Category *</Label>
-            <Select value={form.cbn_license_category} onValueChange={(v) => updateField("cbn_license_category", v)}>
-              <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+            <Select
+              value={form.cbn_license_category}
+              onValueChange={(v) => updateField("cbn_license_category", v)}
+              required
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
               <SelectContent>
                 {LICENSE_CATEGORIES.map((cat) => (
                   <SelectItem key={cat} value={cat}>{cat}</SelectItem>
@@ -188,24 +178,8 @@ const AdminOnboard = () => {
             </Select>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label>Compliance Lead Full Name *</Label>
-              <Input value={form.compliance_lead_name} onChange={(e) => updateField("compliance_lead_name", e.target.value)} required maxLength={100} />
-            </div>
-            <div className="space-y-2">
-              <Label>Compliance Lead Email *</Label>
-              <Input type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} required maxLength={255} />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Phone Number *</Label>
-            <Input value={form.phone} onChange={(e) => updateField("phone", e.target.value)} required maxLength={30} placeholder="+234..." />
-          </div>
-
           <div className="space-y-3">
-            <Label>Report Types *</Label>
+            <Label>Report Types</Label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {ALL_REPORT_TYPES.map((rt) => (
                 <label key={rt} className="flex items-center gap-3 p-3 rounded-lg border cursor-pointer hover:bg-accent/50 transition-colors">
@@ -219,22 +193,11 @@ const AdminOnboard = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>Onboarding Notes (Optional)</Label>
-            <Textarea
-              value={form.onboarding_notes}
-              onChange={(e) => updateField("onboarding_notes", e.target.value)}
-              maxLength={1000}
-              placeholder="Any internal notes about this client..."
-              rows={3}
-            />
-          </div>
-
-          <Button type="submit" disabled={submitting} className="w-full" size="lg">
+          <Button type="submit" disabled={submitting || !form.cbn_license_category} className="w-full" size="lg">
             {submitting ? (
               <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Onboarding Client...
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                Onboarding...
               </>
             ) : (
               "Onboard Client"
