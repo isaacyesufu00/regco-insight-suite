@@ -59,7 +59,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src={regcoLogo} alt="RegCo" className="h-[32px] lg:h-[36px] w-auto" />
+          <img src={regcoLogo} alt="RegCo" className="h-[40px] lg:h-[48px] w-auto" />
         </Link>
 
         {/* Center nav links */}
