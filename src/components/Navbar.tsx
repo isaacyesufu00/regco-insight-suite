@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import regcoLogo from "@/assets/regco-logo.png";
 
 const useCasesDropdown = [
   { label: "MFBs & Community Banks", href: "/use-cases/mfb" },
