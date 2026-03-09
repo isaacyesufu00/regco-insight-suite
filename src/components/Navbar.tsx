@@ -214,7 +214,7 @@ const Navbar = () => {
                 Pricing
               </Link>
               <Link to="/security" className="text-sm font-medium text-muted-foreground hover:text-foreground py-2" onClick={() => setMobileOpen(false)}>
-                Security
+                Security Policy
               </Link>
               <Link to="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground py-2" onClick={() => setMobileOpen(false)}>
                 About
