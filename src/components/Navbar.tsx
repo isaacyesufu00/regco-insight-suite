@@ -46,12 +46,6 @@ const Navbar = () => {
     }
   };
 
-  const handleSecurityClick = (e: React.MouseEvent) => {
-    if (location.pathname === "/") {
-      e.preventDefault();
-      document.getElementById("security")?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-xl">
@@ -141,7 +135,6 @@ const Navbar = () => {
 
           <Link
             to="/security"
-            onClick={handleSecurityClick}
             className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             Security
