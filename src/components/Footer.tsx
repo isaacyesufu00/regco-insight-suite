@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import regcoLogo from "@/assets/regco-logo.png";
 
 type FooterLink = { label: string; to: string | null };
 
@@ -36,7 +35,7 @@ const Footer = () => (
     <div className="container mx-auto px-4 lg:px-8">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
         <div className="col-span-2 md:col-span-1">
-          <img src={regcoLogo} alt="RegCo" className="h-[100px] w-auto" />
+          <span className="text-lg font-bold font-display text-foreground">RegCo</span>
           <p className="mt-3 text-sm text-muted-foreground leading-relaxed max-w-xs">
             AI-powered regulatory reporting and compliance infrastructure for financial institutions.
           </p>
