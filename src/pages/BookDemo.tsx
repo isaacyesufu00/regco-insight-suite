@@ -26,25 +26,21 @@ const timeOptions = [
 ];
 
 const inputStyle: React.CSSProperties = {
-  background: "#FAFAFA",
-  border: "1.5px solid #E0E0E0",
+  background: "rgba(0,0,0,0.04)",
+  border: "1px solid rgba(0,0,0,0.12)",
   borderRadius: 10,
-  padding: "12px 14px",
-  color: "#0A0A0A",
-  fontSize: 14,
+  padding: "12px 16px",
+  color: "#1D1D1F",
+  fontSize: 17,
   width: "100%",
   outline: "none",
-  transition: "all 0.2s",
+  transition: "box-shadow 0.2s",
 };
 
 const focusStyle = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-  e.currentTarget.style.borderColor = "#0A0A0A";
-  e.currentTarget.style.background = "#FFFFFF";
-  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(255,98,0,0.1)";
+  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(0,102,204,0.20)";
 };
 const blurStyle = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-  e.currentTarget.style.borderColor = "#E0E0E0";
-  e.currentTarget.style.background = "#FAFAFA";
   e.currentTarget.style.boxShadow = "none";
 };
 
@@ -58,8 +54,8 @@ const Field = ({
   children: React.ReactNode;
 }) => (
   <div>
-    <label className="block text-[13px] font-medium mb-1.5" style={{ color: "#333" }}>
-      {label} {required && <span style={{ color: "#FF6200" }}>*</span>}
+    <label className="block text-[13px] font-medium mb-1.5" style={{ color: "#1D1D1F" }}>
+      {label} {required && <span style={{ color: "#FF3B30" }}>*</span>}
     </label>
     {children}
   </div>
@@ -161,20 +157,25 @@ const BookDemo = () => {
         <div className="text-center py-8">
           <div
             className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
-            style={{ background: "rgba(255,98,0,0.12)" }}
+            style={{ background: "rgba(52,199,89,0.12)" }}
           >
-            <CheckCircle className="w-9 h-9" style={{ color: "#FF6200" }} />
+            <CheckCircle className="w-9 h-9" style={{ color: "#34C759" }} />
           </div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: "#0A0A0A" }}>
+          <h2 className="text-[28px] font-semibold mb-2" style={{ color: "#1D1D1F", letterSpacing: "-0.02em" }}>
             Demo Booked!
           </h2>
-          <p className="text-sm" style={{ color: "#888" }}>
+          <p className="text-[15px]" style={{ color: "#6E6E73", lineHeight: 1.5 }}>
             We will email you a confirmation within 24 hours.
           </p>
           <Link
             to="/"
-            className="inline-block mt-6 px-5 py-2.5 rounded-[10px] text-sm font-semibold border-2"
-            style={{ borderColor: "#0A0A0A", color: "#0A0A0A" }}
+            className="inline-flex items-center justify-center mt-6 px-6 py-3 rounded-full text-[17px] font-normal btn-press"
+            style={{
+              background: "rgba(0,0,0,0.04)",
+              border: "1px solid rgba(0,0,0,0.12)",
+              color: "#1D1D1F",
+              textDecoration: "none",
+            }}
           >
             Back to home
           </Link>
@@ -182,13 +183,13 @@ const BookDemo = () => {
       ) : (
         <>
           <h2
-            className="text-3xl font-bold text-center mb-2"
-            style={{ color: "#0A0A0A", letterSpacing: "-0.02em" }}
+            className="text-[28px] font-semibold text-center mb-2"
+            style={{ color: "#1D1D1F", letterSpacing: "-0.02em" }}
           >
             Book a Demo
           </h2>
-          <p className="text-[15px] text-center mb-6" style={{ color: "#888" }}>
-            Schedule a live walkthrough with our team.
+          <p className="text-[15px] text-center mb-6" style={{ color: "#6E6E73", lineHeight: 1.5 }}>
+            Schedule a 20-minute live walkthrough.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-3.5">
@@ -272,7 +273,7 @@ const BookDemo = () => {
                       checked={selectedReturns.includes(r)}
                       onCheckedChange={() => toggleReturn(r)}
                     />
-                    <span className="text-sm" style={{ color: "#333" }}>{r}</span>
+                    <span className="text-[15px]" style={{ color: "#1D1D1F" }}>{r}</span>
                   </label>
                 ))}
               </div>
@@ -302,25 +303,24 @@ const BookDemo = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full font-semibold text-white text-base transition-all hover:brightness-110 hover:-translate-y-0.5 disabled:opacity-60"
+              className="w-full text-white text-[17px] font-normal btn-press disabled:opacity-60"
               style={{
-                background: "linear-gradient(135deg, #FF9A00 0%, #FF3D00 100%)",
-                borderRadius: 10,
+                background: "#0066CC",
+                borderRadius: 980,
                 height: 52,
-                boxShadow: "0 4px 16px rgba(255,98,0,0.25)",
               }}
             >
               {loading ? "Submitting…" : "Book My Demo"}
             </button>
 
-            <p className="text-xs text-center mt-3 leading-relaxed" style={{ color: "#888" }}>
+            <p className="text-xs text-center mt-3 leading-relaxed" style={{ color: "#6E6E73" }}>
               Prefer WhatsApp?{" "}
               <a
                 href="https://wa.me/2348000000000"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold"
-                style={{ color: "#FF6200" }}
+                style={{ color: "#0066CC" }}
               >
                 Message us
               </a>

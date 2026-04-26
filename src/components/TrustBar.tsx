@@ -19,14 +19,21 @@ const Mark = () => (
 
 const TrustBar = () => {
   return (
-    <div className="w-full bg-surface-black border-y border-dark-soft overflow-hidden py-3">
+    <div
+      className="w-full overflow-hidden py-3"
+      style={{
+        background: "#F5F5F7",
+        borderTop: "1px solid rgba(0,0,0,0.12)",
+        borderBottom: "1px solid rgba(0,0,0,0.12)",
+      }}
+    >
       <div className="flex w-max animate-marquee-slow">
         {[...Array(2)].map((_, dup) => (
           <div key={dup} className="flex items-center">
             {items.map((item, i) => (
               <span
                 key={`${dup}-${i}`}
-                className="text-[13px] font-medium text-white/35 whitespace-nowrap inline-flex items-center"
+                className="text-[13px] font-normal text-[#6E6E73] whitespace-nowrap inline-flex items-center"
               >
                 {item}
                 <Mark />

@@ -3,6 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { CountUp } from "@/components/motion/CountUp";
 
 interface Profile {
   company_name: string | null;
@@ -27,10 +28,10 @@ const STATUS_STYLE: Record<
   string,
   { label: string; bg: string; border: string; color: string }
 > = {
-  Pending: { label: "Pending", bg: "#F5F5F5", border: "#E0E0E0", color: "#555555" },
-  Processing: { label: "Processing", bg: "#FFFBEB", border: "#FDE68A", color: "#92400E" },
-  Ready: { label: "Ready", bg: "#ECFDF5", border: "#A7F3D0", color: "#047857" },
-  Failed: { label: "Failed", bg: "#FEF2F2", border: "#FECACA", color: "#B91C1C" },
+  Pending: { label: "Pending", bg: "rgba(142,142,147,0.12)", border: "rgba(142,142,147,0.18)", color: "#1D1D1F" },
+  Processing: { label: "Processing", bg: "rgba(255,159,10,0.12)", border: "rgba(255,159,10,0.18)", color: "#1D1D1F" },
+  Ready: { label: "Ready", bg: "rgba(52,199,89,0.12)", border: "rgba(52,199,89,0.18)", color: "#1D1D1F" },
+  Failed: { label: "Failed", bg: "rgba(255,59,48,0.12)", border: "rgba(255,59,48,0.18)", color: "#1D1D1F" },
 };
 
 const StatusPill = ({ status }: { status: string }) => {
@@ -130,15 +131,16 @@ const DashboardHome = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: "#FF6200" }} />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderColor: "#0066CC" }} />
       </div>
     );
   }
 
   const cardStyle: React.CSSProperties = {
     background: "#FFFFFF",
-    border: "1px solid #EEEEEE",
-    borderRadius: 14,
+    border: "1px solid rgba(0,0,0,0.08)",
+    borderRadius: 18,
+    boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
   };
 
   return (
@@ -166,8 +168,8 @@ const DashboardHome = () => {
           <h2
             style={{
               fontSize: 20,
-              fontWeight: 700,
-              color: "#0A0A0A",
+              fontWeight: 600,
+              color: "#1D1D1F",
               marginTop: 4,
               letterSpacing: "-0.01em",
             }}
@@ -177,7 +179,7 @@ const DashboardHome = () => {
         </div>
         <span
           style={{
-            background: "#0A0A0A",
+            background: "#1D1D1F",
             color: "#FFFFFF",
             borderRadius: "50%",
             width: 32,
@@ -205,18 +207,18 @@ const DashboardHome = () => {
             <StatusPill status={c.status} />
             <p
               style={{
-                fontSize: 48,
-                fontWeight: 900,
-                color: "#0A0A0A",
+                fontSize: 56,
+                fontWeight: 700,
+                color: "#1D1D1F",
                 marginTop: 16,
                 lineHeight: 1,
                 letterSpacing: "-0.03em",
               }}
             >
-              {counts[c.status as keyof typeof counts]}
+              <CountUp to={counts[c.status as keyof typeof counts]} />
             </p>
-            <p style={{ fontSize: 16, color: "#0A0A0A", marginTop: 4 }}>reports</p>
-            <p style={{ fontSize: 13, color: "#AAAAAA", marginTop: 2 }}>{c.subtitle}</p>
+            <p style={{ fontSize: 17, color: "#1D1D1F", marginTop: 6 }}>reports</p>
+            <p style={{ fontSize: 13, color: "#6E6E73", marginTop: 4 }}>{c.subtitle}</p>
           </div>
         ))}
       </div>
@@ -226,15 +228,15 @@ const DashboardHome = () => {
         <div
           className="flex items-center justify-between"
           style={{
-            background: "#FAFAFA",
+            background: "#F5F5F7",
             padding: "14px 20px",
-            borderBottom: "1px solid #F0F0F0",
+            borderBottom: "1px solid rgba(0,0,0,0.06)",
           }}
         >
-          <h3 style={{ fontSize: 14, fontWeight: 600, color: "#0A0A0A" }}>Recent Reports</h3>
+          <h3 style={{ fontSize: 14, fontWeight: 600, color: "#1D1D1F" }}>Recent Reports</h3>
           <Link
             to="/dashboard/reports"
-            style={{ fontSize: 13, fontWeight: 500, color: "#FF6200" }}
+            style={{ fontSize: 13, fontWeight: 500, color: "#0066CC" }}
           >
             View all →
           </Link>
@@ -243,14 +245,18 @@ const DashboardHome = () => {
         {recentReports.length === 0 ? (
           <div className="text-center py-12 px-6">
             <p style={{ color: "#888888", fontSize: 14 }}>
-              No reports yet. <Link to="/dashboard/new-report" style={{ color: "#FF6200", fontWeight: 600 }}>Create your first report</Link>.
+              No reports yet.{" "}
+              <Link to="/dashboard/new-report" style={{ color: "#0066CC", fontWeight: 600 }}>
+                Create your first report
+              </Link>
+              .
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr style={{ background: "#FAFAFA", borderBottom: "1px solid #F0F0F0" }}>
+                <tr style={{ background: "#F5F5F7", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
                   {["REPORT", "TYPE", "PERIOD", "STATUS", "DATE", "ACTION"].map((h) => (
                     <th
                       key={h}
@@ -259,7 +265,7 @@ const DashboardHome = () => {
                         padding: "12px 20px",
                         fontSize: 11,
                         fontWeight: 500,
-                        color: "#AAAAAA",
+                        color: "#6E6E73",
                         letterSpacing: "0.08em",
                         textTransform: "uppercase",
                       }}
@@ -273,10 +279,12 @@ const DashboardHome = () => {
                 {recentReports.map((r) => (
                   <tr
                     key={r.id}
-                    className="hover:bg-[#FAFAFA] transition-colors"
-                    style={{ borderBottom: "1px solid #F8F8F8" }}
+                    className="transition-colors"
+                    style={{ borderBottom: "1px solid rgba(0,0,0,0.05)" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(0,0,0,0.02)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
-                    <td style={{ padding: "14px 20px", fontSize: 14, fontWeight: 500, color: "#0A0A0A" }}>
+                    <td style={{ padding: "14px 20px", fontSize: 14, fontWeight: 500, color: "#1D1D1F" }}>
                       {r.report_name}
                     </td>
                     <td style={{ padding: "14px 20px", fontSize: 13, color: "#888888" }}>
@@ -297,7 +305,7 @@ const DashboardHome = () => {
                       {r.status === "Ready" ? (
                         <button
                           onClick={() => handleDownload(r)}
-                          style={{ fontSize: 13, fontWeight: 500, color: "#FF6200" }}
+                          style={{ fontSize: 13, fontWeight: 500, color: "#0066CC" }}
                           className="hover:underline"
                         >
                           Download

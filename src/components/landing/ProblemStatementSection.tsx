@@ -69,7 +69,7 @@ const Mockup = ({ type }: { type: string }) => {
   // calendar
   return (
     <div className="w-full h-full bg-white rounded-xl border border-[#E8E8E8] p-5 shadow-sm">
-      <div className="text-xs font-semibold text-[#0A0A0A] mb-3">January 2026</div>
+      <div className="text-xs font-semibold text-[#1D1D1F] mb-3">January 2026</div>
       <div className="grid grid-cols-7 gap-1.5">
         {Array.from({ length: 31 }).map((_, i) => {
           const day = i + 1;
@@ -105,10 +105,22 @@ const ProblemStatementSection = () => {
   });
 
   return (
-    <section ref={sectionRef} className="relative bg-white" style={{ height: "300vh" }}>
+    <section
+      ref={sectionRef}
+      className="relative"
+      style={{ height: "300vh", background: "#F5F5F7" }}
+    >
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+        <div className="container mx-auto px-[22px]">
+          <div className="max-w-[1200px] mx-auto">
+            <div className="text-[12px] tracking-[0.25em] uppercase text-[#6E6E73] font-semibold">
+              The problem
+            </div>
+            <div className="mt-4 text-[48px] md:text-[56px] font-semibold text-[#1D1D1F] tracking-[-0.02em] leading-[1.05] max-w-[980px]">
+              Compliance is still built on spreadsheets.
+            </div>
+
+            <div className="mt-14 grid lg:grid-cols-2 gap-12 items-center">
             {/* Left: text */}
             <div className="relative min-h-[260px]">
               {painPoints.map((p, i) => {
@@ -130,10 +142,13 @@ const ProblemStatementSection = () => {
                       className="block w-1 h-16 bg-brand-gradient rounded-full mt-2 flex-shrink-0"
                     />
                     <div>
-                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#0A0A0A] leading-[1.1] tracking-tight">
+                      <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[#1D1D1F] leading-[1.1] tracking-tight">
                         {p.headline}
                       </h2>
-                      <p className="mt-5 text-base md:text-lg text-[#555] leading-relaxed max-w-md">
+                      <p
+                        className="mt-5 text-[17px] md:text-[19px] text-[#6E6E73] max-w-md"
+                        style={{ lineHeight: 1.6 }}
+                      >
                         {p.description}
                       </p>
                     </div>
@@ -167,6 +182,7 @@ const ProblemStatementSection = () => {
                   </motion.div>
                 );
               })}
+            </div>
             </div>
           </div>
         </div>

@@ -63,14 +63,15 @@ export function DashboardSidebar({ companyName, pendingCount = 0, unreadMail = 0
       style={{
         width: 280,
         background: "#FFFFFF",
-        borderRight: "1px solid #F0F0F0",
+        borderRight: "1px solid rgba(0,0,0,0.08)",
         padding: "20px 16px",
       }}
     >
       {/* Institution card */}
       <div
         style={{
-          background: "#0A0A0A",
+          background: "#F5F5F7",
+          border: "1px solid rgba(0,0,0,0.08)",
           borderRadius: 14,
           padding: "16px 18px",
           display: "flex",
@@ -83,38 +84,38 @@ export function DashboardSidebar({ companyName, pendingCount = 0, unreadMail = 0
             width: 38,
             height: 38,
             borderRadius: "50%",
-            background: "#1E1E1E",
+            background: "rgba(0,0,0,0.06)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
           }}
         >
-          <Sparkles size={18} color="#FFFFFF" strokeWidth={1.8} />
+          <Sparkles size={18} color="#0066CC" strokeWidth={1.8} />
         </div>
         <div className="min-w-0 flex-1">
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", lineHeight: 1.2 }}>Team</p>
+          <p style={{ fontSize: 12, color: "#6E6E73", lineHeight: 1.2 }}>Team</p>
           <p
             className="truncate"
-            style={{ fontSize: 16, fontWeight: 600, color: "#FFFFFF", marginTop: 2 }}
+            style={{ fontSize: 16, fontWeight: 600, color: "#1D1D1F", marginTop: 2 }}
           >
             {companyName || "Your Institution"}
           </p>
         </div>
-        <ChevronsUpDown size={14} color="rgba(255,255,255,0.4)" />
+        <ChevronsUpDown size={14} color="rgba(0,0,0,0.35)" />
       </div>
 
       {/* Stats row */}
       <div
         className="flex items-center gap-2 mt-3 px-1"
-        style={{ fontSize: 13, color: "#AAAAAA" }}
+        style={{ fontSize: 13, color: "#6E6E73" }}
       >
         <span>Overview</span>
-        <span style={{ color: "#CCCCCC" }}>·</span>
+        <span style={{ color: "rgba(0,0,0,0.25)" }}>·</span>
         <span>{pendingCount + unreadMail + 24}</span>
-        <span style={{ color: "#CCCCCC" }}>·</span>
+        <span style={{ color: "rgba(0,0,0,0.25)" }}>·</span>
         <span>{pendingCount}</span>
-        <span style={{ color: "#CCCCCC" }}>·</span>
+        <span style={{ color: "rgba(0,0,0,0.25)" }}>·</span>
         <span>83</span>
       </div>
 
@@ -136,12 +137,12 @@ export function DashboardSidebar({ companyName, pendingCount = 0, unreadMail = 0
                 gap: 12,
                 padding: "0 12px",
                 borderRadius: 10,
-                background: active ? "#FFFFFF" : "transparent",
-                border: active ? "1px solid #E8E8E8" : "1px solid transparent",
+                background: active ? "#F5F5F7" : "transparent",
+                border: active ? "1px solid rgba(0,0,0,0.08)" : "1px solid transparent",
                 transition: "background 0.15s, border-color 0.15s",
               }}
               onMouseEnter={(e) => {
-                if (!active) e.currentTarget.style.background = "#F8F8F8";
+                if (!active) e.currentTarget.style.background = "rgba(0,0,0,0.03)";
               }}
               onMouseLeave={(e) => {
                 if (!active) e.currentTarget.style.background = "transparent";
@@ -150,14 +151,14 @@ export function DashboardSidebar({ companyName, pendingCount = 0, unreadMail = 0
               <Icon
                 size={18}
                 strokeWidth={1.5}
-                color={active ? "#0A0A0A" : "#AAAAAA"}
+                color={active ? "#1D1D1F" : "#86868B"}
               />
               <span
                 className="flex-1"
                 style={{
                   fontSize: 14,
                   fontWeight: active ? 600 : 500,
-                  color: active ? "#0A0A0A" : "#888888",
+                  color: active ? "#1D1D1F" : "#6E6E73",
                 }}
               >
                 {item.label}
@@ -165,8 +166,8 @@ export function DashboardSidebar({ companyName, pendingCount = 0, unreadMail = 0
               {badge > 0 && (
                 <span
                   style={{
-                    background: "#0A0A0A",
-                    color: "#FFFFFF",
+                    background: "rgba(0,0,0,0.08)",
+                    color: "#1D1D1F",
                     borderRadius: 999,
                     minWidth: 24,
                     height: 24,
@@ -196,7 +197,7 @@ export function DashboardSidebar({ companyName, pendingCount = 0, unreadMail = 0
           borderRadius: 10,
           fontSize: 14,
           fontWeight: 500,
-          color: "#888888",
+          color: "#6E6E73",
           background: "transparent",
         }}
         onMouseEnter={(e) => {
@@ -205,7 +206,7 @@ export function DashboardSidebar({ companyName, pendingCount = 0, unreadMail = 0
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.background = "transparent";
-          e.currentTarget.style.color = "#888888";
+          e.currentTarget.style.color = "#6E6E73";
         }}
       >
         <LogOut size={18} strokeWidth={1.5} />

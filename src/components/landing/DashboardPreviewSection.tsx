@@ -31,15 +31,14 @@ const DashboardPreviewSection = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [0.4, 1]);
 
   return (
-    <section ref={ref} className="bg-white py-24 md:py-32 overflow-hidden">
-      <div className="container mx-auto px-4 lg:px-8">
+    <section ref={ref} className="py-28 md:py-32 overflow-hidden" style={{ background: "#F5F5F7" }}>
+      <div className="container mx-auto px-[22px]">
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="text-4xl md:text-5xl lg:text-6xl font-black text-[#0A0A0A] text-center tracking-tight"
-          style={{ letterSpacing: "-0.02em" }}
+          className="text-[48px] md:text-[56px] font-semibold text-[#1D1D1F] text-center tracking-[-0.02em] leading-[1.05]"
         >
           A dashboard built for compliance teams.
         </motion.h2>
@@ -48,7 +47,8 @@ const DashboardPreviewSection = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="mt-4 text-center text-[#555] text-base md:text-lg max-w-xl mx-auto"
+          className="mt-5 text-center text-[17px] md:text-[19px] text-[#6E6E73] max-w-[680px] mx-auto"
+          style={{ lineHeight: 1.6 }}
         >
           One place for raw data, generated reports, calendar deadlines, and regulator notices.
         </motion.p>
@@ -63,23 +63,45 @@ const DashboardPreviewSection = () => {
           }}
           className="mt-16 max-w-6xl mx-auto"
         >
-          <div className="bg-surface-light-2 rounded-[20px] border border-[#E8E8E8] shadow-2xl overflow-hidden">
+          <div
+            className="rounded-[20px] overflow-hidden"
+            style={{
+              background: "#FFFFFF",
+              border: "1px solid rgba(0,0,0,0.08)",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.10)",
+            }}
+          >
             <div className="grid grid-cols-[260px_1fr] min-h-[440px]">
               {/* Sidebar */}
-              <div className="bg-surface-light-2 p-4 border-r border-[#E8E8E8]">
+              <div
+                className="p-4"
+                style={{
+                  background: "#FFFFFF",
+                  borderRight: "1px solid rgba(0,0,0,0.08)",
+                }}
+              >
                 {/* Institution card */}
-                <div className="bg-[#0A0A0A] rounded-2xl p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center">
-                    <span className="text-white text-lg">✦</span>
+                <div
+                  className="rounded-2xl p-4 flex items-center gap-3"
+                  style={{
+                    background: "#F5F5F7",
+                    border: "1px solid rgba(0,0,0,0.08)",
+                  }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center"
+                    style={{ background: "rgba(0,0,0,0.06)" }}
+                  >
+                    <span className="text-[#1D1D1F] text-lg">✦</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-[11px] text-white/55">Team</div>
-                    <div className="text-sm font-semibold text-white truncate">Nakdnx MFB</div>
+                    <div className="text-[11px] text-[#6E6E73]">Team</div>
+                    <div className="text-sm font-semibold text-[#1D1D1F] truncate">Nakdnx MFB</div>
                   </div>
                 </div>
 
                 {/* Stats row */}
-                <div className="flex items-center gap-4 mt-3 px-2 text-[12px] text-[#888]">
+                <div className="flex items-center gap-4 mt-3 px-2 text-[12px] text-[#6E6E73]">
                   <span>Overview</span>
                   <span>· 24</span>
                   <span>· 6</span>
@@ -93,26 +115,34 @@ const DashboardPreviewSection = () => {
                       key={item.label}
                       className={`flex items-center gap-3.5 px-3 py-2.5 rounded-[10px] transition-colors ${
                         item.active
-                          ? "bg-white border border-[#E8E8E8]"
+                          ? "bg-[#F5F5F7]"
                           : ""
                       }`}
+                      style={
+                        item.active
+                          ? { border: "1px solid rgba(0,0,0,0.08)" }
+                          : undefined
+                      }
                     >
                       <item.icon
                         className={`w-4 h-4 ${
-                          item.active ? "text-[#0A0A0A]" : "text-[#888]"
+                          item.active ? "text-[#1D1D1F]" : "text-[#86868B]"
                         }`}
                       />
                       <span
                         className={`flex-1 text-[13px] ${
                           item.active
-                            ? "text-[#0A0A0A] font-semibold"
-                            : "text-[#555] font-medium"
+                            ? "text-[#1D1D1F] font-semibold"
+                            : "text-[#6E6E73] font-medium"
                         }`}
                       >
                         {item.label}
                       </span>
                       {item.badge && (
-                        <span className="w-5 h-5 rounded-full bg-[#0A0A0A] text-white text-[10px] font-bold flex items-center justify-center">
+                        <span
+                          className="w-5 h-5 rounded-full text-[10px] font-semibold flex items-center justify-center"
+                          style={{ background: "rgba(0,0,0,0.08)", color: "#1D1D1F" }}
+                        >
                           {item.badge}
                         </span>
                       )}
@@ -122,36 +152,54 @@ const DashboardPreviewSection = () => {
               </div>
 
               {/* Main content */}
-              <div className="bg-surface-light-2 p-6">
-                <div className="bg-white rounded-2xl border border-[#E8E8E8] p-5 flex items-center justify-between">
+              <div className="p-6" style={{ background: "#F5F5F7" }}>
+                <div
+                  className="bg-white rounded-2xl p-5 flex items-center justify-between"
+                  style={{ border: "1px solid rgba(0,0,0,0.08)" }}
+                >
                   <div className="flex items-center gap-3">
                     <span className="w-2 h-2 rounded-full bg-success" />
                     <div>
-                      <div className="text-[11px] text-[#888]">Nakdnx MFB Ltd.</div>
-                      <div className="text-base font-bold text-[#0A0A0A]">
+                      <div className="text-[11px] text-[#6E6E73]">Nakdnx MFB Ltd.</div>
+                      <div className="text-base font-semibold text-[#1D1D1F]">
                         CBN Q4 2025 Return
                       </div>
                     </div>
                   </div>
-                  <span className="w-7 h-7 rounded-full bg-[#0A0A0A] text-white text-xs font-bold flex items-center justify-center">
+                  <span
+                    className="w-7 h-7 rounded-full text-xs font-semibold flex items-center justify-center"
+                    style={{ background: "#1D1D1F", color: "#FFFFFF" }}
+                  >
                     8
                   </span>
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 gap-4">
-                  <div className="bg-white rounded-2xl border border-[#E8E8E8] p-5">
-                    <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-white border border-[#0A0A0A]/20 text-[10px] font-semibold text-[#0A0A0A]">
+                  <div
+                    className="bg-white rounded-2xl p-5"
+                    style={{ border: "1px solid rgba(0,0,0,0.08)" }}
+                  >
+                    <div
+                      className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold"
+                      style={{ background: "rgba(142,142,147,0.12)", color: "#1D1D1F" }}
+                    >
                       Pending
                     </div>
-                    <div className="mt-3 text-2xl font-bold text-[#0A0A0A]">12 reports</div>
-                    <div className="text-[12px] text-[#888] mt-1">Awaiting upload</div>
+                    <div className="mt-3 text-2xl font-semibold text-[#1D1D1F]">12 reports</div>
+                    <div className="text-[12px] text-[#6E6E73] mt-1">Awaiting upload</div>
                   </div>
-                  <div className="bg-white rounded-2xl border border-[#E8E8E8] p-5">
-                    <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-warning/15 border border-warning/30 text-[10px] font-semibold text-warning-foreground">
+                  <div
+                    className="bg-white rounded-2xl p-5"
+                    style={{ border: "1px solid rgba(0,0,0,0.08)" }}
+                  >
+                    <div
+                      className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold"
+                      style={{ background: "rgba(255,159,10,0.12)", color: "#1D1D1F" }}
+                    >
                       Processing
                     </div>
-                    <div className="mt-3 text-2xl font-bold text-[#0A0A0A]">4 reports</div>
-                    <div className="text-[12px] text-[#888] mt-1">Validating CBS data</div>
+                    <div className="mt-3 text-2xl font-semibold text-[#1D1D1F]">4 reports</div>
+                    <div className="text-[12px] text-[#6E6E73] mt-1">Validating CBS data</div>
                   </div>
                 </div>
               </div>

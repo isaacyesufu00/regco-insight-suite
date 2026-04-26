@@ -164,10 +164,10 @@ const Login = () => {
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold mb-2" style={{ color: "#0A0A0A" }}>
+          <h2 className="text-[28px] font-semibold mb-2" style={{ color: "#1D1D1F", letterSpacing: "-0.02em" }}>
             Account Temporarily Locked
           </h2>
-          <p className="text-sm mb-4" style={{ color: "#888" }}>
+          <p className="text-[15px] mb-4" style={{ color: "#6E6E73", lineHeight: 1.5 }}>
             Try again in 15 minutes or reset your password.
           </p>
           <div className="text-3xl font-mono font-bold mb-6" style={{ color: "#ef4444" }}>
@@ -175,22 +175,24 @@ const Login = () => {
           </div>
           <Link
             to="/forgot-password"
-            className="inline-block px-5 py-2.5 rounded-[10px] text-sm font-semibold border-2"
-            style={{ borderColor: "#0A0A0A", color: "#0A0A0A" }}
+            className="inline-flex items-center justify-center px-6 py-3 rounded-full text-[17px] font-normal btn-press"
+            style={{
+              background: "rgba(0,0,0,0.04)",
+              border: "1px solid rgba(0,0,0,0.12)",
+              color: "#1D1D1F",
+              textDecoration: "none",
+            }}
           >
             Forgot Password
           </Link>
         </div>
       ) : (
         <>
-          <h2
-            className="text-3xl font-bold text-center mb-2"
-            style={{ color: "#0A0A0A", letterSpacing: "-0.02em" }}
-          >
-            Welcome back
+          <h2 className="text-[28px] font-semibold text-center mb-2" style={{ color: "#1D1D1F", letterSpacing: "-0.02em" }}>
+            Sign in to RegCo
           </h2>
-          <p className="text-[15px] text-center mb-8" style={{ color: "#888" }}>
-            Sign in to your RegCo account
+          <p className="text-[15px] text-center mb-8" style={{ color: "#6E6E73", lineHeight: 1.5 }}>
+            Enter your email and password to continue.
           </p>
 
           <form onSubmit={handleLogin} className="space-y-4">
@@ -198,7 +200,7 @@ const Login = () => {
               <label
                 htmlFor="email"
                 className="block text-[13px] font-medium mb-1.5"
-                style={{ color: "#333" }}
+                style={{ color: "#1D1D1F" }}
               >
                 Email
               </label>
@@ -209,31 +211,23 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full text-[15px] focus:outline-none transition-all"
+                className="w-full text-[17px] focus:outline-none transition-all"
                 style={{
-                  background: "#FAFAFA",
-                  border: "1.5px solid #E0E0E0",
+                  background: "rgba(0,0,0,0.04)",
+                  border: "1px solid rgba(0,0,0,0.12)",
                   borderRadius: 10,
-                  padding: "13px 16px",
-                  color: "#0A0A0A",
+                  padding: "12px 16px",
+                  color: "#1D1D1F",
                 }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#0A0A0A";
-                  e.currentTarget.style.background = "#FFFFFF";
-                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(255,98,0,0.1)";
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = "#E0E0E0";
-                  e.currentTarget.style.background = "#FAFAFA";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
+                onFocus={(e) => (e.currentTarget.style.boxShadow = "0 0 0 3px rgba(0,102,204,0.20)")}
+                onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
               />
             </div>
             <div>
               <label
                 htmlFor="password"
                 className="block text-[13px] font-medium mb-1.5"
-                style={{ color: "#333" }}
+                style={{ color: "#1D1D1F" }}
               >
                 Password
               </label>
@@ -244,30 +238,22 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full text-[15px] focus:outline-none transition-all"
+                className="w-full text-[17px] focus:outline-none transition-all"
                 style={{
-                  background: "#FAFAFA",
-                  border: "1.5px solid #E0E0E0",
+                  background: "rgba(0,0,0,0.04)",
+                  border: "1px solid rgba(0,0,0,0.12)",
                   borderRadius: 10,
-                  padding: "13px 16px",
-                  color: "#0A0A0A",
+                  padding: "12px 16px",
+                  color: "#1D1D1F",
                 }}
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#0A0A0A";
-                  e.currentTarget.style.background = "#FFFFFF";
-                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(255,98,0,0.1)";
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = "#E0E0E0";
-                  e.currentTarget.style.background = "#FAFAFA";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
+                onFocus={(e) => (e.currentTarget.style.boxShadow = "0 0 0 3px rgba(0,102,204,0.20)")}
+                onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
               />
               <div className="text-right mt-1.5">
                 <Link
                   to="/forgot-password"
-                  className="text-[13px] font-medium"
-                  style={{ color: "#888" }}
+                  className="text-[14px] font-normal"
+                  style={{ color: "#0066CC" }}
                 >
                   Forgot password?
                 </Link>
@@ -283,9 +269,9 @@ const Login = () => {
               <div
                 className="rounded-[10px] px-4 py-3 text-sm font-medium"
                 style={{
-                  background: "#fff7ed",
-                  color: "#c2410c",
-                  border: "1px solid #fed7aa",
+                  background: "rgba(255,159,10,0.12)",
+                  color: "#1D1D1F",
+                  border: "1px solid rgba(255,159,10,0.18)",
                 }}
               >
                 ⚠️ {attemptCount} failed attempts. Account locks at 5.
@@ -295,24 +281,22 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full font-semibold text-white text-base transition-all hover:brightness-110 hover:-translate-y-0.5 disabled:opacity-60"
+              className="w-full text-white text-[17px] font-normal btn-press disabled:opacity-60"
               style={{
-                background: "linear-gradient(135deg, #FF9A00 0%, #FF3D00 100%)",
-                borderRadius: 10,
+                background: "#0066CC",
+                borderRadius: 980,
                 height: 52,
-                boxShadow: "0 4px 16px rgba(255,98,0,0.25)",
               }}
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
-          <p className="text-center text-sm mt-6" style={{ color: "#888" }}>
-            Don't have an account?{" "}
-            <Link to="/book-demo" className="font-semibold" style={{ color: "#FF6200" }}>
-              Book a demo
+          <div className="mt-6 text-center text-[14px]" style={{ color: "#6E6E73" }}>
+            <Link to="/book-demo" style={{ color: "#0066CC" }}>
+              Don't have an account? Book a demo
             </Link>
-          </p>
+          </div>
 
           <div
             className="text-center text-xs mt-10"

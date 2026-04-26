@@ -73,7 +73,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div
       className="min-h-screen w-full"
-      style={{ background: "#F0F0F0", padding: "24px" }}
+      style={{ background: "#F5F5F7", padding: "24px" }}
     >
       <div
         className="flex w-full overflow-hidden"
@@ -91,7 +91,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         />
         <main
           className="flex-1 min-w-0 overflow-auto"
-          style={{ background: "#F5F5F5", padding: 20 }}
+          style={{ background: "#F5F5F7", padding: 24 }}
         >
           {children}
         </main>

@@ -23,10 +23,10 @@ const features = [
 
 const FeatureSplitSection = () => {
   return (
-    <section className="bg-white">
-      <div className="grid md:grid-cols-2 min-h-[640px]">
-        {/* Left: white text panel */}
-        <div className="flex items-center px-8 md:px-16 lg:px-24 py-20">
+    <section style={{ background: "#F5F5F7" }}>
+      <div className="grid md:grid-cols-2 min-h-[680px]">
+        {/* Left: editorial text */}
+        <div className="flex items-center px-[22px] md:px-16 lg:px-24 py-24 md:py-28">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -36,14 +36,13 @@ const FeatureSplitSection = () => {
           >
             <RegCoLogo size="sm" />
             <h2
-              className="mt-8 text-4xl md:text-5xl font-black text-[#0A0A0A] leading-[1.05] tracking-tight"
-              style={{ letterSpacing: "-0.02em" }}
+              className="mt-8 text-[48px] md:text-[56px] font-semibold text-[#1D1D1F] leading-[1.05] tracking-[-0.02em]"
             >
               No Manual Shortcuts.
               <br />
               Just Real Compliance.
             </h2>
-            <p className="mt-5 text-[15px] text-[#555] leading-relaxed">
+            <p className="mt-5 text-[17px] text-[#6E6E73]" style={{ lineHeight: 1.6 }}>
               RegCo enforces the same controls a CBN examiner would — every figure
               traced, every total reconciled, every ratio checked.
             </p>
@@ -51,14 +50,19 @@ const FeatureSplitSection = () => {
             <ul className="mt-8 space-y-5">
               {features.map((f) => (
                 <li key={f.label} className="flex items-start gap-4">
-                  <div className="w-9 h-9 rounded-lg bg-[#0A0A0A] flex items-center justify-center flex-shrink-0">
-                    <f.icon className="w-4 h-4 text-white" />
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: "rgba(0,0,0,0.06)" }}
+                  >
+                    <f.icon className="w-4 h-4" style={{ color: "#0066CC" }} />
                   </div>
                   <div>
-                    <div className="text-[15px] font-semibold text-[#0A0A0A]">
+                    <div className="text-[17px] font-medium text-[#1D1D1F]">
                       {f.label}
                     </div>
-                    <div className="text-[13px] text-[#555] mt-0.5">{f.desc}</div>
+                    <div className="text-[15px] text-[#6E6E73] mt-1" style={{ lineHeight: 1.5 }}>
+                      {f.desc}
+                    </div>
                   </div>
                 </li>
               ))}
@@ -67,13 +71,19 @@ const FeatureSplitSection = () => {
             <div className="mt-10 flex items-center gap-3">
               <Link
                 to="/book-demo"
-                className="px-5 py-2.5 rounded-full bg-[#0A0A0A] text-white text-sm font-semibold hover:scale-[1.03] transition-transform ease-apple"
+                className="px-6 py-3 rounded-full text-white text-[17px] font-normal btn-press"
+                style={{ background: "#0066CC" }}
               >
                 Get Started
               </Link>
               <Link
                 to="/security"
-                className="px-5 py-2.5 rounded-full text-sm font-semibold text-[#0A0A0A] hover:bg-[#F5F5F5] transition-colors"
+                className="px-6 py-3 rounded-full text-[17px] font-normal"
+                style={{
+                  background: "rgba(0,0,0,0.04)",
+                  color: "#1D1D1F",
+                  border: "1px solid rgba(0,0,0,0.12)",
+                }}
               >
                 Read Docs →
               </Link>
@@ -81,21 +91,29 @@ const FeatureSplitSection = () => {
           </motion.div>
         </div>
 
-        {/* Right: gradient halftone panel */}
-        <div className="relative bg-brand-gradient overflow-hidden flex items-center justify-center min-h-[400px]">
-          <div className="absolute inset-0 halftone-overlay opacity-50" />
+        {/* Right: Apple-style feature card */}
+        <div className="relative overflow-hidden flex items-center justify-center min-h-[400px] px-[22px] py-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="relative z-10 w-72 md:w-80 bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-6"
+            className="relative z-10 w-full max-w-[420px] bg-white rounded-2xl p-7"
+            style={{
+              border: "1px solid rgba(0,0,0,0.08)",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.10)",
+            }}
           >
-            <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-[#888] font-semibold">
+            <div className="flex items-center justify-between text-[12px] text-[#6E6E73]">
               <span>CBN Return</span>
-              <span className="px-2 py-0.5 rounded-full bg-success/10 text-success">Validated</span>
+              <span
+                className="px-2.5 py-1 rounded-full text-[12px] font-medium"
+                style={{ background: "rgba(52,199,89,0.12)", color: "#1D1D1F" }}
+              >
+                Validated
+              </span>
             </div>
-            <div className="mt-4 text-xl font-bold text-[#0A0A0A] leading-tight">
+            <div className="mt-4 text-[28px] font-semibold text-[#1D1D1F] leading-tight tracking-[-0.02em]">
               Q4 2025 Regulatory Return
             </div>
             <div className="mt-6 grid grid-cols-3 gap-3">
@@ -104,15 +122,24 @@ const FeatureSplitSection = () => {
                 { l: "Liquidity", v: "42.1%" },
                 { l: "NPL", v: "3.2%" },
               ].map((m) => (
-                <div key={m.l} className="bg-[#F5F5F5] rounded-lg p-3 text-center">
-                  <div className="text-[10px] text-[#888] uppercase tracking-wider">{m.l}</div>
-                  <div className="mt-1 text-base font-bold text-[#0A0A0A]">{m.v}</div>
+                <div
+                  key={m.l}
+                  className="rounded-lg p-3 text-center"
+                  style={{ background: "#F5F5F7", border: "1px solid rgba(0,0,0,0.06)" }}
+                >
+                  <div className="text-[10px] text-[#6E6E73] uppercase tracking-wider">{m.l}</div>
+                  <div className="mt-1 text-base font-semibold text-[#1D1D1F]">{m.v}</div>
                 </div>
               ))}
             </div>
-            <div className="mt-5 pt-4 border-t border-[#E8E8E8] flex items-center justify-between">
-              <span className="text-xs text-[#555]">Generated in 3m 42s</span>
-              <span className="text-xs font-semibold text-brand-gradient">Ready</span>
+            <div
+              className="mt-6 pt-4 flex items-center justify-between"
+              style={{ borderTop: "1px solid rgba(0,0,0,0.08)" }}
+            >
+              <span className="text-[12px] text-[#6E6E73]">Generated in 3m 42s</span>
+              <span className="text-[12px] font-medium" style={{ color: "#0066CC" }}>
+                Ready
+              </span>
             </div>
           </motion.div>
         </div>

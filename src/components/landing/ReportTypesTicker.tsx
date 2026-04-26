@@ -24,7 +24,7 @@ const Row = ({ direction }: { direction: "left" | "right" }) => (
           {reportTypes.map((t, i) => (
             <span
               key={`${dup}-${i}`}
-              className="inline-flex items-center text-base font-semibold text-white whitespace-nowrap"
+              className="inline-flex items-center text-[17px] font-normal text-[#1D1D1F] whitespace-nowrap"
             >
               {t}
               <Square />
@@ -38,7 +38,14 @@ const Row = ({ direction }: { direction: "left" | "right" }) => (
 
 const ReportTypesTicker = () => {
   return (
-    <section className="bg-surface-black py-16 border-y border-dark-soft">
+    <section
+      className="py-14"
+      style={{
+        background: "#F5F5F7",
+        borderTop: "1px solid rgba(0,0,0,0.12)",
+        borderBottom: "1px solid rgba(0,0,0,0.12)",
+      }}
+    >
       <Row direction="left" />
       <Row direction="right" />
     </section>
