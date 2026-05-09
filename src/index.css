@@ -110,3 +110,10 @@
   0%, 100% { box-shadow: 0 0 80px rgba(0,102,204,0.08); }
   50% { box-shadow: 0 0 200px rgba(0,102,204,0.18); }
 }
+
+/* Tutorial page responsive grid override */
+@media (min-width: 768px) {
+  .md\:\!grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}

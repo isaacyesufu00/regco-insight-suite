@@ -6,6 +6,7 @@ import { WelcomeTutorialModal } from "@/components/WelcomeTutorialModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useSessionTimeout } from "@/hooks/useSessionTimeout";
+import { useLocation } from "react-router-dom";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -14,6 +15,8 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { user } = useAuth();
   const [companyName, setCompanyName] = useState<string | null>(null);
+  const location = useLocation();
+  const isTutorialPage = location.pathname === "/dashboard/tutorial";
   useSessionTimeout();
 
   useEffect(() => {
@@ -60,7 +63,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <SidebarTrigger className="mr-4" />
               <span style={{ fontSize: 14, fontWeight: 600, color: "#1D1D1F" }}>RegCo</span>
             </header>
-            <main style={{ flex: 1, padding: 20, background: "#F5F5F7", overflowY: "auto" }}>
+            <main style={{ 
+              flex: 1, 
+              padding: isTutorialPage ? 0 : 20, 
+              background: isTutorialPage ? "transparent" : "#F5F5F7", 
+              overflowY: isTutorialPage ? "visible" : "auto" 
+            }}>
               {children}
             </main>
           </div>
