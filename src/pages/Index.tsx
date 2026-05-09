@@ -139,95 +139,164 @@ function AnimatedSection({
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 0 — HERO
+   SECTION 0 — HERO (Apple Education Style)
 ═══════════════════════════════════════════════════════════════════════════════ */
+const textVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 }
+};
+
 function HeroSection() {
-  const words = ["Everything", "you", "need."];
-  
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
+
+  // Scroll-triggered animations
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.6, 1], [1, 1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+
   return (
-    <section
+    <motion.section
+      ref={heroRef}
       id="section-0"
-      style={{
-        minHeight: "100vh",
-        background: colors.blackSection,
+      style={{ 
+        opacity: heroOpacity,
+        position: "relative",
+        width: "100%",
+        height: "100vh",
+        minHeight: 600,
+        overflow: "hidden",
         display: "flex",
-        alignItems: "center",
+        alignItems: "flex-end",
         justifyContent: "center",
-        textAlign: "center",
-        padding: "40px 24px",
-        paddingTop: 100,
       }}
     >
-      <div>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+      {/* Full background image */}
+      <motion.div
+        style={{
+          scale: heroScale,
+          position: "absolute",
+          inset: 0,
+          backgroundImage: "url('/hero_image_.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center 20%",
+          backgroundRepeat: "no-repeat",
+          transformOrigin: "center",
+          willChange: "transform",
+        }}
+      />
+
+      {/* Dark gradient overlay */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.0) 35%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.68) 100%)",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Text content — bottom center */}
+      <motion.div
+        style={{
+          y: textY,
+          opacity: textOpacity,
+          position: "relative",
+          zIndex: 2,
+          textAlign: "center",
+          paddingBottom: 80,
+          paddingLeft: 20,
+          paddingRight: 20,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <motion.h1
+          variants={textVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.7, delay: 0.3, ease: easeApple }}
           style={{
-            fontSize: 14,
-            color: colors.accentBlue,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: 16,
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif",
+            fontSize: "clamp(40px, 8vw, 64px)",
+            fontWeight: 700,
+            lineHeight: 1.05,
+            letterSpacing: "-0.5px",
+            color: "#FFFFFF",
+            margin: 0,
+            padding: 0,
           }}
         >
-          RegCo Compliance Platform
-        </motion.p>
-        
-        <h1 style={{ 
-          fontSize: "clamp(48px, 10vw, 80px)", 
-          fontWeight: 700, 
-          color: colors.whiteSurface,
-          lineHeight: 1.05,
-          marginBottom: 24,
-        }}>
-          {words.map((word, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                delay: 0.4 + i * 0.08, 
-                duration: 0.6, 
-                ease: easeApple 
-              }}
-              style={{ display: "inline-block", marginRight: i < words.length - 1 ? "0.3em" : 0 }}
-            >
-              {word}
-            </motion.span>
-          ))}
-        </h1>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.9, duration: 0.6 }}
+          Built for
+        </motion.h1>
+
+        <motion.h1
+          variants={textVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.7, delay: 0.5, ease: easeApple }}
           style={{
-            fontSize: "clamp(18px, 3vw, 24px)",
-            color: colors.textTertiary,
-            maxWidth: 600,
-            margin: "0 auto",
-            lineHeight: 1.5,
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif",
+            fontSize: "clamp(40px, 8vw, 64px)",
+            fontWeight: 700,
+            lineHeight: 1.05,
+            letterSpacing: "-0.5px",
+            color: "#FF375F",
+            margin: 0,
+            padding: 0,
+            marginTop: 2,
           }}
         >
-          One dashboard. Every CBN return. Filed in under 5 minutes.
+          every compliance officer.
+        </motion.h1>
+
+        <motion.p
+          variants={textVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ duration: 0.7, delay: 0.7, ease: easeApple }}
+          style={{
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif",
+            fontSize: "clamp(15px, 2vw, 17px)",
+            fontWeight: 400,
+            lineHeight: 1.47059,
+            letterSpacing: "-0.022em",
+            color: "rgba(255,255,255,0.92)",
+            maxWidth: 560,
+            textAlign: "center",
+            marginTop: 20,
+          }}
+        >
+          Stronger compliance outcomes start with automation that understands Nigerian regulations. RegCo turns 3 days of manual filing into under 5 minutes — for every CBN, NFIU, SCUML, NDIC and FIRS return.
         </motion.p>
-        
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        style={{
+          position: "absolute",
+          bottom: 32,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 10,
+        }}
+      >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.3 }}
-          style={{ marginTop: 60 }}
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
         >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown size={28} color={colors.whiteSurface} strokeWidth={1.5} />
-          </motion.div>
+          <ChevronDown size={28} color="rgba(255,255,255,0.6)" strokeWidth={1.5} />
         </motion.div>
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 }
 
@@ -340,17 +409,37 @@ function Section1DashboardHome() {
   ];
   
   return (
-    <AnimatedSection background={colors.pageBg} id="section-1">
-      <div 
+    <section
+      id="section-1"
+      style={{
+        position: "relative",
+        zIndex: 2,
+        background: colors.pageBg,
+        borderRadius: "20px 20px 0 0",
+        marginTop: -20,
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "80px 24px",
+      }}
+    >
+      <motion.div
         ref={ref}
-        style={{ 
-          display: "grid", 
-          gridTemplateColumns: "1fr", 
-          gap: 60, 
-          alignItems: "center",
-        }}
-        className="md:!grid-cols-2"
+        initial={{ opacity: 0, y: 50 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ duration: 0.8, ease: easeApple }}
+        style={{ width: "100%", maxWidth: 1200 }}
       >
+        <div 
+          style={{ 
+            display: "grid", 
+            gridTemplateColumns: "1fr", 
+            gap: 60, 
+            alignItems: "center",
+          }}
+          className="md:!grid-cols-2"
+        >
         {/* Left Text */}
         <motion.div
           initial={{ opacity: 0, x: -60 }}
@@ -411,7 +500,8 @@ function Section1DashboardHome() {
         {/* Right Mockup */}
         <DashboardHomeMockup />
       </div>
-    </AnimatedSection>
+      </motion.div>
+    </section>
   );
 }
 
