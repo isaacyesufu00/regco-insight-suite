@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform, useInView, useAnimation } from "framer-motion";
 import { 
   FileText, Calendar, Upload, Download, Shield, Zap, 
-  Check, ChevronDown
+  Check, ChevronDown, Lock, Clock, Building2
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
@@ -74,7 +74,7 @@ function NavigationDots({
         zIndex: 100 
       }}
     >
-      {Array.from({ length: 9 }).map((_, i) => (
+      {Array.from({ length: 12 }).map((_, i) => (
         <button
           key={i}
           onClick={() => onNavigate(i)}
@@ -1546,118 +1546,1060 @@ function Section8Settings() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   SECTION 9 — FINAL CTA
+   WHO WE SERVE — STICKY SCROLL SECTION
 ═══════════════════════════════════════════════════════════════════════════════ */
-function Section9FinalCTA() {
-  const ref = useRef(null);
-  const navigate = useNavigate();
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [displayText, setDisplayText] = useState("");
-  const fullText = "Ready to simplify compliance?";
+const institutions = [
+  {
+    name: "Unit Microfinance Banks",
+    scale: "Operating in single locations across Nigeria",
+    pain: "Filing 7–10 mandatory returns manually every month with limited compliance staff",
+    value: "Complete automation means one compliance officer can handle all filings alone",
+    stat: "847",
+    statLabel: "Unit MFBs licensed by CBN",
+  },
+  {
+    name: "State Microfinance Banks",
+    scale: "Operating across entire states with multiple branches",
+    pain: "Consolidating data from multiple branches for unified regulatory reporting",
+    value: "Multi-branch data consolidation and automated return generation",
+    stat: "126",
+    statLabel: "State MFBs licensed by CBN",
+  },
+  {
+    name: "National Microfinance Banks",
+    scale: "Operating nationwide with complex reporting requirements",
+    pain: "Managing 16 mandatory returns across 5 regulators with dedicated teams",
+    value: "Full regulatory calendar management and automated multi-regulator filing",
+    stat: "8",
+    statLabel: "National MFBs licensed by CBN",
+  },
+  {
+    name: "Primary Mortgage Banks",
+    scale: "Specialised mortgage lending institutions",
+    pain: "Complex loan portfolio reporting and CBN prudential return compliance",
+    value: "Automated loan classification, provision calculation, and prudential returns",
+    stat: "34",
+    statLabel: "PMBs licensed by CBN",
+  },
+  {
+    name: "Finance Companies",
+    scale: "Non-bank financial institutions and fintechs",
+    pain: "FIRS and SCUML compliance alongside CBN oversight",
+    value: "Complete multi-regulator compliance from a single dashboard",
+    stat: "50+",
+    statLabel: "Fastest growing licensed category",
+  },
+];
+
+// SVG Building illustrations for each institution type
+function InstitutionSVG({ index }: { index: number }) {
+  const svgStyle = { stroke: "#FFFFFF", strokeWidth: 1.5, fill: "none" };
   
+  if (index === 0) {
+    // Unit MFB - Small single-storey building
+    return (
+      <svg width="200" height="160" viewBox="0 0 200 160" style={svgStyle}>
+        <rect x="40" y="60" width="120" height="80" rx="2" />
+        <rect x="60" y="80" width="30" height="40" />
+        <rect x="110" y="80" width="30" height="40" />
+        <line x1="40" y1="60" x2="100" y2="30" />
+        <line x1="160" y1="60" x2="100" y2="30" />
+        <rect x="85" y="100" width="30" height="40" />
+      </svg>
+    );
+  }
+  if (index === 1) {
+    // State MFB - Multi-branch layout
+    return (
+      <svg width="200" height="160" viewBox="0 0 200 160" style={svgStyle}>
+        <rect x="20" y="80" width="50" height="60" rx="2" />
+        <rect x="75" y="50" width="50" height="90" rx="2" />
+        <rect x="130" y="80" width="50" height="60" rx="2" />
+        <line x1="45" y1="80" x2="45" y2="50" />
+        <line x1="45" y1="50" x2="100" y2="50" />
+        <line x1="155" y1="80" x2="155" y2="50" />
+        <line x1="155" y1="50" x2="100" y2="50" />
+        <rect x="30" y="100" width="15" height="20" />
+        <rect x="85" y="70" width="15" height="20" />
+        <rect x="140" y="100" width="15" height="20" />
+      </svg>
+    );
+  }
+  if (index === 2) {
+    // National MFB - Large headquarters
+    return (
+      <svg width="200" height="160" viewBox="0 0 200 160" style={svgStyle}>
+        <rect x="50" y="30" width="100" height="110" rx="2" />
+        <rect x="60" y="50" width="20" height="15" />
+        <rect x="90" y="50" width="20" height="15" />
+        <rect x="120" y="50" width="20" height="15" />
+        <rect x="60" y="75" width="20" height="15" />
+        <rect x="90" y="75" width="20" height="15" />
+        <rect x="120" y="75" width="20" height="15" />
+        <rect x="60" y="100" width="20" height="15" />
+        <rect x="90" y="100" width="20" height="15" />
+        <rect x="120" y="100" width="20" height="15" />
+        <rect x="85" y="120" width="30" height="20" />
+        <line x1="50" y1="30" x2="100" y2="10" />
+        <line x1="150" y1="30" x2="100" y2="10" />
+      </svg>
+    );
+  }
+  if (index === 3) {
+    // PMB - Building with house icon
+    return (
+      <svg width="200" height="160" viewBox="0 0 200 160" style={svgStyle}>
+        <rect x="50" y="50" width="100" height="90" rx="2" />
+        <rect x="65" y="70" width="25" height="25" />
+        <rect x="110" y="70" width="25" height="25" />
+        <rect x="65" y="105" width="25" height="25" />
+        <rect x="110" y="105" width="25" height="25" />
+        {/* House icon on top */}
+        <polygon points="100,15 130,40 70,40" />
+        <rect x="80" y="40" width="40" height="10" />
+      </svg>
+    );
+  }
+  // Finance Company - Modern fintech tower
+  return (
+    <svg width="200" height="160" viewBox="0 0 200 160" style={svgStyle}>
+      <rect x="70" y="20" width="60" height="120" rx="4" />
+      <line x1="85" y1="40" x2="115" y2="40" />
+      <line x1="85" y1="55" x2="115" y2="55" />
+      <line x1="85" y1="70" x2="115" y2="70" />
+      <line x1="85" y1="85" x2="115" y2="85" />
+      <line x1="85" y1="100" x2="115" y2="100" />
+      <line x1="85" y1="115" x2="115" y2="115" />
+      <circle cx="100" cy="30" r="5" />
+      <rect x="90" y="125" width="20" height="15" />
+    </svg>
+  );
+}
+
+function WhoWeServeSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
   useEffect(() => {
-    if (isInView) {
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i <= fullText.length) {
-          setDisplayText(fullText.slice(0, i));
-          i++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 50);
-      return () => clearInterval(interval);
-    }
-  }, [isInView]);
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      const index = Math.min(Math.floor(latest * institutions.length), institutions.length - 1);
+      setActiveIndex(index);
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress]);
+
+  // Counter animation hook
+  function AnimatedCounter({ value, inView }: { value: string; inView: boolean }) {
+    const [count, setCount] = useState(0);
+    const numericValue = parseInt(value.replace(/[^0-9]/g, '')) || 0;
+    const suffix = value.replace(/[0-9]/g, '');
+
+    useEffect(() => {
+      if (inView && numericValue > 0) {
+        let start = 0;
+        const duration = 1500;
+        const increment = numericValue / (duration / 16);
+        const timer = setInterval(() => {
+          start += increment;
+          if (start >= numericValue) {
+            setCount(numericValue);
+            clearInterval(timer);
+          } else {
+            setCount(Math.floor(start));
+          }
+        }, 16);
+        return () => clearInterval(timer);
+      }
+    }, [inView, numericValue]);
+
+    return <>{count}{suffix}</>;
+  }
 
   return (
     <section
-      ref={ref}
-      id="section-9"
+      ref={containerRef}
+      id="who-we-serve"
       style={{
-        minHeight: "80vh",
         background: colors.blackSection,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        padding: "80px 24px",
+        position: "relative",
+        height: `${100 + institutions.length * 100}vh`,
       }}
     >
-      <div>
-        <h2 style={{ 
-          fontSize: "clamp(36px, 6vw, 56px)", 
-          fontWeight: 700, 
-          color: colors.whiteSurface,
-          lineHeight: 1.1,
-          marginBottom: 16,
-          minHeight: "1.2em",
+      {/* Header */}
+      <div style={{
+        position: "sticky",
+        top: 0,
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        zIndex: 1,
+      }}>
+        {/* Top intro section */}
+        <div style={{
+          padding: "80px 24px 40px",
+          textAlign: "center",
         }}>
-          {displayText}
-          <motion.span
-            animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.5, repeat: Infinity }}
-            style={{ color: colors.accentBlue }}
-          >|</motion.span>
-        </h2>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 1.8, duration: 0.6 }}
-          style={{
-            fontSize: "clamp(18px, 3vw, 24px)",
-            color: colors.textTertiary,
-            marginBottom: 40,
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{
+              fontSize: 13,
+              color: colors.accentBlue,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              marginBottom: 12,
+            }}
+          >Who We Serve</motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            style={{
+              fontSize: "clamp(36px, 5vw, 56px)",
+              fontWeight: 700,
+              color: colors.whiteSurface,
+              marginBottom: 12,
+            }}
+          >
+            Built for every licensed institution.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            style={{
+              fontSize: 19,
+              color: colors.textTertiary,
+            }}
+          >
+            From Unit MFBs to Commercial Banks.
+          </motion.p>
+        </div>
+
+        {/* Two-column sticky content */}
+        <div style={{
+          flex: 1,
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          overflow: "hidden",
+        }}
+        className="!grid-cols-1 md:!grid-cols-2"
+        >
+          {/* Left panel - Content */}
+          <div style={{
+            background: colors.darkSection,
+            padding: "40px 48px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+          }}>
+            {institutions.map((inst, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: activeIndex === i ? 1 : 0 }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  position: activeIndex === i ? "relative" : "absolute",
+                  display: activeIndex === i ? "block" : "none",
+                }}
+              >
+                <h3 style={{
+                  fontSize: "clamp(32px, 4vw, 48px)",
+                  fontWeight: 700,
+                  color: colors.whiteSurface,
+                  marginBottom: 12,
+                }}>
+                  {inst.name}
+                </h3>
+                <p style={{
+                  fontSize: 17,
+                  color: colors.textTertiary,
+                  marginBottom: 32,
+                }}>
+                  {inst.scale}
+                </p>
+                <p style={{
+                  fontSize: "clamp(48px, 6vw, 64px)",
+                  fontWeight: 700,
+                  color: colors.accentBlue,
+                  marginBottom: 8,
+                }}>
+                  <AnimatedCounter value={inst.stat} inView={activeIndex === i} />
+                </p>
+                <p style={{
+                  fontSize: 15,
+                  color: colors.textTertiary,
+                  marginBottom: 32,
+                }}>
+                  {inst.statLabel}
+                </p>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                  {["Automated Filing", "Multi-regulator", "Real-time Status"].map((pill) => (
+                    <span key={pill} style={{
+                      background: "rgba(255,255,255,0.1)",
+                      color: colors.whiteSurface,
+                      fontSize: 12,
+                      fontWeight: 500,
+                      padding: "6px 14px",
+                      borderRadius: 20,
+                    }}>
+                      {pill}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Right panel - SVG Illustration */}
+          <div style={{
+            background: colors.blackSection,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 40,
           }}
-        >
-          Join leading microfinance banks across Nigeria.
-        </motion.p>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 2.2, duration: 0.6 }}
-          style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}
-        >
-          <motion.button
-            whileHover={{ scale: 1.02, background: "#0077ED" }}
-            onClick={() => navigate("/book-demo")}
-            style={{
-              background: colors.accentBlue,
-              color: colors.whiteSurface,
-              fontSize: 17,
-              fontWeight: 500,
-              padding: "16px 40px",
-              borderRadius: 980,
-              border: "none",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
+          className="hidden md:flex"
           >
-            Book a Demo
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.02, background: "rgba(255,255,255,0.15)" }}
-            onClick={() => navigate("/login")}
-            style={{
-              background: "transparent",
-              color: colors.whiteSurface,
-              fontSize: 17,
-              fontWeight: 500,
-              padding: "16px 40px",
-              borderRadius: 980,
-              border: `1px solid ${colors.textTertiary}`,
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-          >
-            Sign In
-          </motion.button>
-        </motion.div>
+            {institutions.map((_, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ 
+                  opacity: activeIndex === i ? 1 : 0,
+                  scale: activeIndex === i ? 1 : 0.9,
+                }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  position: activeIndex === i ? "relative" : "absolute",
+                  display: activeIndex === i ? "block" : "none",
+                }}
+              >
+                <InstitutionSVG index={i} />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom stats bar */}
+      <div style={{
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: colors.darkSection,
+        padding: "32px 24px",
+      }}>
+        <div style={{
+          maxWidth: 1000,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 24,
+          textAlign: "center",
+        }}
+        className="!grid-cols-2 md:!grid-cols-4"
+        >
+          {[
+            { value: "1,000+", label: "Licensed institutions in Nigeria" },
+            { value: "16", label: "Mandatory returns per institution per year" },
+            { value: "₦2M", label: "Minimum fine per missed filing" },
+            { value: "5 min", label: "RegCo filing time vs 3–5 days manual" },
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+            >
+              <p style={{ fontSize: 28, fontWeight: 700, color: colors.whiteSurface }}>{stat.value}</p>
+              <p style={{ fontSize: 13, color: colors.textTertiary }}>{stat.label}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   PRICING SECTION
+═══════════════════════════════════════════════════════════════════════════════ */
+const pricingTiers = [
+  {
+    name: "Unit MFB",
+    badge: "Unit MFB",
+    badgeColor: colors.textTertiary,
+    features: [
+      "Up to 10 CBN returns",
+      "NFIU quarterly reports",
+      "FIRS monthly remittances",
+      "1 user account",
+      "Email support",
+    ],
+    popular: false,
+  },
+  {
+    name: "State MFB",
+    badge: "State MFB",
+    badgeColor: colors.accentBlue,
+    features: [
+      "All 16 mandatory returns",
+      "Multi-branch data consolidation",
+      "SCUML annual compliance",
+      "3 user accounts",
+      "Priority support",
+      "Compliance calendar",
+    ],
+    popular: true,
+  },
+  {
+    name: "National MFB",
+    badge: "National MFB",
+    badgeColor: colors.darkSection,
+    features: [
+      "All 16 mandatory returns",
+      "Unlimited branches",
+      "Dedicated compliance manager",
+      "Unlimited user accounts",
+      "24/7 support",
+      "API access",
+    ],
+    popular: false,
+  },
+  {
+    name: "Commercial Bank",
+    badge: "Commercial Bank",
+    badgeColor: colors.blackSection,
+    features: [
+      "Everything in National MFB",
+      "Custom CBS integration",
+      "White-label option",
+      "SLA guarantee",
+      "On-premise deployment option",
+      "Custom regulatory modules",
+    ],
+    popular: false,
+  },
+];
+
+function PricingSection() {
+  const ref = useRef(null);
+  const navigate = useNavigate();
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <section
+      id="pricing"
+      ref={ref}
+      style={{
+        background: colors.pageBg,
+        padding: "100px 24px 80px",
+      }}
+    >
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: 64 }}>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          style={{
+            fontSize: 13,
+            color: colors.accentBlue,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            marginBottom: 12,
+          }}
+        >Pricing</motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.1 }}
+          style={{
+            fontSize: "clamp(36px, 5vw, 56px)",
+            fontWeight: 700,
+            color: colors.textPrimary,
+            marginBottom: 16,
+          }}
+        >
+          The right plan for your institution.
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.2 }}
+          style={{
+            fontSize: 19,
+            color: colors.textSecondary,
+            maxWidth: 560,
+            margin: "0 auto",
+            lineHeight: 1.5,
+          }}
+        >
+          Transparent pricing based on your license category.
+          <br />
+          Every plan includes all returns for your regulator tier.
+        </motion.p>
+      </div>
+
+      {/* Pricing Cards */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: 20,
+        maxWidth: 1200,
+        margin: "0 auto 64px",
+      }}
+      className="!grid-cols-1 sm:!grid-cols-2 lg:!grid-cols-4"
+      >
+        {pricingTiers.map((tier, i) => (
+          <motion.div
+            key={tier.name}
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: i * 0.1, duration: 0.6, ease: easeApple }}
+            whileHover={{ y: -8, boxShadow: "0 32px 80px rgba(0,0,0,0.12)" }}
+            style={{
+              background: colors.whiteSurface,
+              borderRadius: 20,
+              border: tier.popular ? `2px solid ${colors.accentBlue}` : "1px solid rgba(0,0,0,0.08)",
+              padding: "40px 32px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+              position: "relative",
+              transform: tier.popular ? "scale(1.03)" : "scale(1)",
+              zIndex: tier.popular ? 2 : 1,
+              transition: "transform 0.3s ease, box-shadow 0.3s ease",
+            }}
+          >
+            {tier.popular && (
+              <div style={{
+                position: "absolute",
+                top: -12,
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: colors.accentBlue,
+                color: colors.whiteSurface,
+                fontSize: 11,
+                fontWeight: 600,
+                padding: "4px 12px",
+                borderRadius: 20,
+              }}>
+                Most Popular
+              </div>
+            )}
+
+            {/* Badge */}
+            <span style={{
+              background: tier.popular ? `${colors.accentBlue}15` : "rgba(0,0,0,0.05)",
+              color: tier.badgeColor,
+              fontSize: 12,
+              fontWeight: 600,
+              padding: "6px 14px",
+              borderRadius: 20,
+              alignSelf: "flex-start",
+            }}>
+              {tier.badge}
+            </span>
+
+            {/* Features */}
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, flex: 1 }}>
+              {tier.features.map((feature) => (
+                <li key={feature} style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  fontSize: 15,
+                  color: colors.textPrimary,
+                  marginBottom: 12,
+                }}>
+                  <Check size={16} style={{ color: colors.systemGreen, flexShrink: 0 }} />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            {/* Price */}
+            <div style={{ borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 20 }}>
+              <p style={{ fontSize: 13, color: colors.textTertiary, marginBottom: 4 }}>Pricing</p>
+              <p style={{ fontSize: 22, fontWeight: 700, color: colors.textPrimary }}>
+                Contact us for pricing
+              </p>
+            </div>
+
+            {/* CTA */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              onClick={() => navigate("/book-demo")}
+              style={{
+                background: colors.accentBlue,
+                color: colors.whiteSurface,
+                fontSize: 15,
+                fontWeight: 500,
+                padding: "14px 24px",
+                borderRadius: 980,
+                border: "none",
+                cursor: "pointer",
+                width: "100%",
+              }}
+            >
+              Request a Quote
+            </motion.button>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Trust Bar */}
+      <div style={{
+        background: colors.pageBg,
+        borderTop: "1px solid rgba(0,0,0,0.06)",
+        paddingTop: 40,
+      }}>
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: 48,
+          flexWrap: "wrap",
+        }}>
+          {[
+            { icon: Shield, text: "CBN Compliant Architecture" },
+            { icon: Lock, text: "Bank-grade Data Security" },
+            { icon: Clock, text: "99.9% Uptime SLA" },
+          ].map(({ icon: Icon, text }) => (
+            <motion.div
+              key={text}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <Icon size={20} color={colors.textTertiary} />
+              <span style={{ fontSize: 14, color: colors.textSecondary }}>{text}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ABOUT SECTION
+═══════════════════════════════════════════════════════════════════════════════ */
+function AboutSection() {
+  const navigate = useNavigate();
+
+  // Word-by-word animation for problem statement
+  const problemText = "Nigerian financial institutions file over 16,000 regulatory returns every month. Most are filed manually. In Excel. Taking 3 to 5 days each.";
+  const problemWords = problemText.split(" ");
+
+  return (
+    <section id="about">
+      {/* Sub-section 1: Problem Statement */}
+      <div style={{
+        background: colors.blackSection,
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "80px 24px",
+        textAlign: "center",
+      }}>
+        <div style={{ maxWidth: 900 }}>
+          <p style={{
+            fontSize: "clamp(36px, 6vw, 72px)",
+            fontWeight: 700,
+            color: colors.whiteSurface,
+            lineHeight: 1.15,
+            marginBottom: 32,
+          }}>
+            {problemWords.map((word, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.04, duration: 0.3 }}
+                style={{ display: "inline-block", marginRight: "0.3em" }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 1.5 }}
+            style={{
+              fontSize: 24,
+              color: colors.textTertiary,
+            }}
+          >
+            One missed filing costs a minimum ₦2,000,000 CBN fine. There is a better way.
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Sub-section 2: Scale Card */}
+      <div style={{
+        background: colors.pageBg,
+        padding: "100px 24px",
+        display: "flex",
+        justifyContent: "center",
+      }}>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{
+            background: colors.whiteSurface,
+            borderRadius: 24,
+            padding: 48,
+            maxWidth: 780,
+            width: "100%",
+            boxShadow: "0 32px 80px rgba(0,0,0,0.08)",
+          }}
+        >
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: 40,
+          }}
+          className="!grid-cols-1 sm:!grid-cols-2"
+          >
+            {[
+              { value: "1,000+", label: "Licensed financial institutions in Nigeria" },
+              { value: "16", label: "Mandatory returns per institution per year" },
+              { value: "₦2,000,000", label: "Minimum CBN fine per late filing" },
+              { value: "5 minutes", label: "RegCo filing time" },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                style={{ textAlign: "center" }}
+              >
+                <p style={{ fontSize: 56, fontWeight: 700, color: colors.textPrimary, marginBottom: 8 }}>
+                  {stat.value}
+                </p>
+                <p style={{ fontSize: 15, color: colors.textSecondary }}>{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Sub-section 3: Mission Statement */}
+      <div style={{
+        background: colors.whiteSurface,
+        padding: "100px 24px",
+        textAlign: "center",
+      }}>
+        <div style={{ maxWidth: 680, margin: "0 auto" }}>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            style={{
+              fontSize: 13,
+              color: colors.accentBlue,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              marginBottom: 24,
+            }}
+          >Our Mission</motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{
+              fontSize: 36,
+              fontWeight: 500,
+              color: colors.textPrimary,
+              lineHeight: 1.3,
+              marginBottom: 32,
+            }}
+          >
+            {`"RegCo exists so that every licensed financial institution in Nigeria can meet its regulatory obligations without friction, without fear, and without 3 sleepless days before every CBN deadline."`}
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            <p style={{ fontSize: 15, color: colors.textTertiary }}>— Isaac Yesufu</p>
+            <p style={{ fontSize: 15, color: colors.textTertiary }}>Founder & CEO, RegCo Technologies Limited</p>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Sub-section 4: Roadmap */}
+      <div style={{
+        background: colors.pageBg,
+        padding: "100px 24px",
+      }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            style={{
+              fontSize: 13,
+              color: colors.accentBlue,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              marginBottom: 12,
+              textAlign: "center",
+            }}
+          >Product Roadmap</motion.p>
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{
+              fontSize: 48,
+              fontWeight: 700,
+              color: colors.textPrimary,
+              marginBottom: 64,
+              textAlign: "center",
+            }}
+          >
+            {`What's coming.`}
+          </motion.h3>
+
+          {/* Timeline */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 24,
+            position: "relative",
+          }}
+          className="!grid-cols-1 md:!grid-cols-2 lg:!grid-cols-4"
+          >
+            {/* Connector line */}
+            <div style={{
+              position: "absolute",
+              top: 40,
+              left: "5%",
+              right: "5%",
+              height: 2,
+              background: "rgba(0,0,0,0.1)",
+              zIndex: 0,
+            }}
+            className="hidden lg:block"
+            />
+
+            {[
+              {
+                quarter: "Q1 2026",
+                status: "Launched",
+                color: colors.systemGreen,
+                items: ["Core regulatory return automation for all 16 CBN/NFIU/SCUML/NDIC/FIRS returns"],
+              },
+              {
+                quarter: "Q2 2026",
+                status: "In Progress",
+                color: colors.accentBlue,
+                items: ["Universal CBS parser — direct FlexCube, Ncube, Finacle integration"],
+              },
+              {
+                quarter: "Q3 2026",
+                status: "Coming",
+                color: "transparent",
+                borderColor: colors.accentBlue,
+                items: ["PEP screening and sanctions list integration", "Regulatory change tracking and automatic form updates"],
+              },
+              {
+                quarter: "Q4 2026",
+                status: "Planned",
+                color: "transparent",
+                borderColor: colors.textTertiary,
+                items: ["Examination preparation pack", "Multi-institution management for holding companies"],
+              },
+            ].map((milestone, i) => (
+              <motion.div
+                key={milestone.quarter}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                style={{
+                  background: milestone.color || colors.pageBg,
+                  border: milestone.borderColor ? `2px solid ${milestone.borderColor}` : "none",
+                  borderRadius: 16,
+                  padding: 24,
+                  position: "relative",
+                  zIndex: 1,
+                }}
+              >
+                <div style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  marginBottom: 12,
+                }}>
+                  <span style={{
+                    fontSize: 14,
+                    fontWeight: 600,
+                    color: milestone.color === "transparent" ? colors.textPrimary : colors.whiteSurface,
+                  }}>
+                    {milestone.quarter}
+                  </span>
+                  {milestone.status === "Launched" && (
+                    <Check size={16} color={colors.whiteSurface} />
+                  )}
+                </div>
+                <span style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: milestone.color === "transparent" ? colors.textSecondary : "rgba(255,255,255,0.8)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                }}>
+                  {milestone.status}
+                </span>
+                <ul style={{
+                  listStyle: "none",
+                  padding: 0,
+                  margin: "16px 0 0",
+                }}>
+                  {milestone.items.map((item) => (
+                    <li key={item} style={{
+                      fontSize: 13,
+                      color: milestone.color === "transparent" ? colors.textSecondary : "rgba(255,255,255,0.9)",
+                      marginBottom: 8,
+                      lineHeight: 1.4,
+                    }}>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Sub-section 5: Final CTA */}
+      <div style={{
+        background: colors.darkSection,
+        padding: "100px 24px",
+        textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        {/* Pulsing glow */}
+        <motion.div
+          animate={{ opacity: [0.06, 0.12, 0.06] }}
+          transition={{ duration: 4, repeat: Infinity }}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 600,
+            height: 600,
+            background: `radial-gradient(circle, ${colors.accentBlue} 0%, transparent 70%)`,
+            pointerEvents: "none",
+          }}
+        />
+
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{
+              fontSize: "clamp(36px, 5vw, 56px)",
+              fontWeight: 700,
+              color: colors.whiteSurface,
+              marginBottom: 16,
+            }}
+          >
+            Ready to file your first return?
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            style={{
+              fontSize: 19,
+              color: colors.textTertiary,
+              marginBottom: 40,
+            }}
+          >
+            Join Nigerian financial institutions already using RegCo.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              onClick={() => navigate("/book-demo")}
+              style={{
+                background: colors.whiteSurface,
+                color: colors.textPrimary,
+                fontSize: 17,
+                fontWeight: 500,
+                padding: "16px 40px",
+                borderRadius: 980,
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Book a Demo
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02, background: "rgba(255,255,255,0.15)" }}
+              onClick={() => navigate("/login")}
+              style={{
+                background: "transparent",
+                color: colors.whiteSurface,
+                fontSize: 17,
+                fontWeight: 500,
+                padding: "16px 40px",
+                borderRadius: 980,
+                border: `1px solid ${colors.textTertiary}`,
+                cursor: "pointer",
+              }}
+            >
+              Sign In
+            </motion.button>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SECTION 9 — FINAL CTA (LEGACY - KEPT FOR NAVIGATION)
+═══════════════════════════════════════════════════════════════════════════════ */
+function Section9FinalCTA() {
+  // This section is now replaced by the About section's final CTA
+  // Keeping function stub for any legacy references
+  return null;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -1671,7 +2613,7 @@ const Index = () => {
   // Track active section based on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = document.querySelectorAll("[id^='section-']");
+      const sections = document.querySelectorAll("[id^='section-'], #who-we-serve, #pricing, #about");
       const scrollPosition = window.scrollY + window.innerHeight / 2;
       
       sections.forEach((section, i) => {
@@ -1690,7 +2632,12 @@ const Index = () => {
   }, []);
 
   const scrollToSection = (index: number) => {
-    const section = document.getElementById(`section-${index}`);
+    const sectionIds = [
+      "section-0", "section-1", "section-2", "section-3", "section-4",
+      "section-5", "section-6", "section-7", "section-8",
+      "who-we-serve", "pricing", "about"
+    ];
+    const section = document.getElementById(sectionIds[index]);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
     }
@@ -1714,7 +2661,9 @@ const Index = () => {
       <Section6RiskAnalysis />
       <Section7ComplianceMail />
       <Section8Settings />
-      <Section9FinalCTA />
+      <WhoWeServeSection />
+      <PricingSection />
+      <AboutSection />
     </div>
   );
 };
